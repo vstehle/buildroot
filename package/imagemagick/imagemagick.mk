@@ -119,3 +119,4 @@ IMAGEMAGICK_CONF_OPT += --without-bzlib
 endif
 
 $(eval $(autotools-package))
+$(eval $(host-autotools-package))
