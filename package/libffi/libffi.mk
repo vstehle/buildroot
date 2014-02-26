@@ -22,6 +22,12 @@ endef
 
 LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
 
+# Copy some headers for host, too.
+define HOST_LIBFFI_MOVE_HEADERS
+	cp $(HOST_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(HOST_DIR)/usr/include/
+endef
+
+HOST_LIBFFI_POST_INSTALL_HOOKS += HOST_LIBFFI_MOVE_HEADERS
 
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))
