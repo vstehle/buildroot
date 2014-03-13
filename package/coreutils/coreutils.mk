@@ -80,3 +80,4 @@ COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_POST_INSTALL
 # may need to be reinstated by the clean targets.
 
 $(eval $(autotools-package))
+$(eval $(host-autotools-package))
