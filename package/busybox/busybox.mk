@@ -214,6 +214,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
 endef
 
 $(eval $(generic-package))
+$(eval $(host-generic-package))
 
 busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
