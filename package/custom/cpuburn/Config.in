@@ -1,0 +1,5 @@
+config BR2_PACKAGE_CPUBURN
+	bool "cpuburn"
+	depends on BR2_arm
+	help
+	  This is cpuburn for ARM Cortex-A[89].
