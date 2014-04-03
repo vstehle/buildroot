@@ -12,7 +12,7 @@ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 1a31a06..cc7557d 100755
+index 4f70a3f..a5d1655 100755
 --- a/configure.ac
 +++ b/configure.ac
 @@ -17,7 +17,7 @@ AC_DEFUN([FIND_PARSER_SONAME],
@@ -26,7 +26,7 @@ index 1a31a06..cc7557d 100755
      if [[ -z "$SONAME" ]]; then
 @@ -37,7 +37,7 @@ AC_DEFUN([FIND_ACODEC_SONAME],
      AC_MSG_CHECKING([for lib_$1_wrap_$2_elinux.so soname])
-     path=`$PKG_CONFIG --variable=libdir libfslaudiocodec`
+     path=`$PKG_CONFIG --variable=libdir libfslaudiocodec | sed -e 's|.*/imx-mm/|/usr/lib/imx-mm/|'`
      SONAME=$( $CC -print-file-name=$path/wrap/lib_$1_wrap_$2_elinux.so | \
 -	    while read output; do objdump -p $output | \
 +	    while read output; do $OBJDUMP -p $output | \
