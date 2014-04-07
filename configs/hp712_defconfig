@@ -1,0 +1,10 @@
+# architecture
+BR2_hppa=y
+
+# toolchain
+# Use gcc 4.7, as gcc 4.8 breaks the build.
+BR2_GCC_VERSION_4_7_X=y
+
+# kernel
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_DEFCONFIG="712"
