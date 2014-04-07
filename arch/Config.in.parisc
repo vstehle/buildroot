@@ -1,0 +1,10 @@
+config BR2_ARCH
+	default "parisc" if BR2_parisc
+
+config BR2_ENDIAN
+	default "BIG"	 if BR2_parisc
+
+config BR2_GCC_TARGET_ARCH
+	default "1.1" if BR2_parisc
+
+# TODO: 1.0, 1.1, 2.0, 64
