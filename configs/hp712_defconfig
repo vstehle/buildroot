@@ -1,0 +1,8 @@
+# architecture
+BR2_parisc=y
+
+# kernel
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_DEFCONFIG="712"
+
+# TODO: bootloader
