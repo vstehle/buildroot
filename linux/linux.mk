@@ -46,6 +46,9 @@ LINUX_DEPENDENCIES += host-kmod host-lzop
 ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
 	LINUX_DEPENDENCIES += host-uboot-tools
 endif
+ifeq ($(BR2_LINUX_KERNEL_LIFIMAGE),y)
+	LINUX_DEPENDENCIES += host-palo
+endif
 
 LINUX_MAKE_FLAGS = \
 	HOSTCC="$(HOSTCC)" \
@@ -97,6 +100,8 @@ else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
 LINUX_IMAGE_NAME = cuImage.$(KERNEL_DTS_NAME)
 else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
 LINUX_IMAGE_NAME = simpleImage.$(KERNEL_DTS_NAME)
+else ifeq ($(BR2_LINUX_KERNEL_LIFIMAGE),y)
+LINUX_IMAGE_NAME = lifimage
 else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
 LINUX_IMAGE_NAME = linux.bin
 else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
@@ -133,6 +138,8 @@ endif
 ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
 LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
 else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+else ifeq ($(BR2_LINUX_KERNEL_LIFIMAGE),y)
 LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
 else
 ifeq ($(KERNEL_ARCH),avr32)
@@ -260,11 +267,22 @@ LINUX_APPEND_DTB += $(sep) MKIMAGE_ARGS=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) |\
 endif
 endif
 
+ifeq ($(BR2_LINUX_KERNEL_LIFIMAGE),y)
+# For the lifimage format, we generate a palo.conf, to be able to specify the
+# loader path and the kernel command line.
+define LINUX_CREATE_PALO_CONF
+	cp -f linux/palo.conf $(@D)/palo.conf
+	echo "--bootloader=$(HOST_DIR)/usr/share/palo/iplboot" >>$(@D)/palo.conf
+	echo "--commandline=$(BR2_LINUX_KERNEL_LIFIMAGE_CMDLINE)" >>$(@D)/palo.conf
+endef
+endif
+
 # Compilation. We make sure the kernel gets rebuilt when the
 # configuration has changed.
 define LINUX_BUILD_CMDS
 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
 		cp $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
+	$(LINUX_CREATE_PALO_CONF)
 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\

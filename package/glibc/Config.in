@@ -37,6 +37,7 @@ config BR2_GLIBC_VERSION_2_19
 
 config BR2_GLIBC_VERSION_2_20
 	bool "2.20"
+	depends on !BR2_hppa
 
 endchoice
 
