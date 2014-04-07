@@ -243,6 +243,14 @@ config BR2_xtensa
 	  http://en.wikipedia.org/wiki/Xtensa
 	  http://www.tensilica.com/
 
+config BR2_hppa
+	bool "HP Precision Architecture (a.k.a PA-RISC)"
+	help
+	  PA-RISC is an instruction set architecture (ISA) developed by
+	  Hewlett-Packard.
+
+	  http://en.wikipedia.org/wiki/PA-RISC
+
 endchoice
 
 # The following string values are defined by the individual
@@ -403,6 +411,10 @@ endif
 
 if BR2_xtensa
 source "arch/Config.in.xtensa"
+endif
+
+if BR2_hppa
+source "arch/Config.in.hppa"
 endif
 
 endmenu # Target options

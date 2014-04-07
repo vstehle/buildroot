@@ -1,0 +1,46 @@
+choice
+	prompt "Target architecture ISA Variant"
+	depends on BR2_hppa
+	default BR2_hppa_1_1
+	help
+	  Specific architecture ISA variant to use.
+
+	  Code compiled for lower numbered architectures runs on higher
+	  numbered architectures, but not the other way around.
+
+	  - Select 1.0 for pre-1991 PA.
+	  - Select 1.1 for PA-7x00 models.
+	  - Select 2.0 for PA-8x00 models.
+
+	  If unsure chose 1.1.
+
+config BR2_hppa_1_0
+	bool "PA 1.0"
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+	help
+	  Select this for pre-1991 PA.
+
+config BR2_hppa_1_1
+	bool "PA 1.1"
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+	help
+	  Select this for PA-7x00 models.
+
+config BR2_hppa_2_0
+	bool "PA 2.0"
+	select BR2_ARCH_HAS_MMU_OPTIONAL
+	help
+	  Select this for PA-8x00 models.
+
+endchoice
+
+config BR2_ARCH
+	default "hppa" if BR2_hppa
+
+config BR2_ENDIAN
+	default "BIG"	 if BR2_hppa
+
+config BR2_GCC_TARGET_ARCH
+	default "1.0" if BR2_hppa_1_0
+	default "1.1" if BR2_hppa_1_1
+	default "2.0" if BR2_hppa_2_0
