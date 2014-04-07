@@ -37,6 +37,7 @@ export HOSTARCH := $(shell uname -m | \
 	sed -e s/i.86/x86/ \
 	    -e s/sun4u/sparc64/ \
 	    -e s/arm.*/arm/ \
+	    -e s/hppa.*/parisc/ \
 	    -e s/sa110/arm/ \
 	    -e s/ppc64/powerpc64/ \
 	    -e s/ppc/powerpc/ \
@@ -306,6 +307,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
 	-e s/arcle/arc/ \
 	-e s/arceb/arc/ \
 	-e s/arm.*/arm/ -e s/sa110/arm/ \
+	-e s/hppa.*/parisc/ \
 	-e s/aarch64/arm64/ \
 	-e s/bfin/blackfin/ \
 	-e s/parisc64/parisc/ \

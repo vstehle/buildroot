@@ -208,6 +208,10 @@ config BR2_LINUX_KERNEL_SIMPLEIMAGE
 	select BR2_LINUX_KERNEL_DTS_SUPPORT
 	select BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
 
+config BR2_LINUX_KERNEL_LIFIMAGE
+	bool "lifimage"
+	depends on BR2_hppa
+
 config BR2_LINUX_KERNEL_LINUX_BIN
 	bool "linux.bin"
 	depends on BR2_microblaze
@@ -256,6 +260,23 @@ config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
 	  beginning with 0x, for example: 0x00008000.
 
 	  If unsure, let this option empty.
+
+config BR2_LINUX_KERNEL_LIFIMAGE_CMDLINE
+	string "Command line"
+	depends on BR2_hppa
+	depends on BR2_LINUX_KERNEL_LIFIMAGE
+	default "0/vmlinuz HOME=/"
+	help
+	  You can specify the kernel command line for your PA-RISC lifimage.
+	  This is Palo --commandline argument.
+
+	  For example: if you want NFS root, use the following command line
+	  (edit the HOSTNAME):
+	    0/vmlinuz HOME=/ root=/dev/nfs nfsroot=HOSTNAME ip=bootp
+
+	  If you have root on a disk partition, use this (edit the partition
+	  name):
+	    0/vmlinuz HOME=/ root=/dev/sda1
 
 config BR2_LINUX_KERNEL_DTS_SUPPORT
 	bool "Device tree support"
