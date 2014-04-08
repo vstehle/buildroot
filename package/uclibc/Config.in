@@ -193,6 +193,7 @@ config BR2_UCLIBC_TARGET_ARCH
 	default xtensa	   if BR2_xtensa
 	default i386	   if BR2_i386
 	default x86_64	   if BR2_x86_64
+	default hppa	   if BR2_parisc
 
 # This is only useful for uClibc <= 0.9.32. It can be removed once
 # Buildroot will support only uClibc >= 0.9.33 on ARM.
