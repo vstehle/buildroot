@@ -1,0 +1,33 @@
+From 88d0e05e4ecf3ae2c0c61a0f6a0c917c9fc96220 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
+Date: Tue, 15 Apr 2014 22:13:10 +0200
+Subject: [PATCH] uClibc 0.9.33 has rpmatch
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@freescale.com>
+---
+ include/common.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/common.h b/include/common.h
+index 3b1366e..e1e15e0 100644
+--- a/include/common.h
++++ b/include/common.h
+@@ -103,10 +103,10 @@ extern "C" {
+ } while(0)
+ 
+ #if defined(__UCLIBC__)
+-/* uClibc versions before 0.9.34 don't have rpmatch() */
++/* uClibc versions before 0.9.33 don't have rpmatch() */
+ #if __UCLIBC_MAJOR__ == 0 && \
+ 		(__UCLIBC_MINOR__ < 9 || \
+-		(__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ < 34))
++		(__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ < 33))
+ static inline int rpmatch(const char *resp)
+ {
+     return (resp[0] == 'y' || resp[0] == 'Y') ? 1 :
+-- 
+1.9.1
+
