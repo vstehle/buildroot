@@ -1,0 +1,29 @@
+From 697578f49f95db9d373aaa54476c6b00794481b4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
+Date: Wed, 23 Apr 2014 17:05:22 +0200
+Subject: [PATCH] Fix ftconfig.h directory creation
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@freescale.com>
+---
+ builds/unix/install.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/builds/unix/install.mk b/builds/unix/install.mk
+index 83525ee..e298351 100644
+--- a/builds/unix/install.mk
++++ b/builds/unix/install.mk
+@@ -49,7 +49,7 @@ install: $(PROJECT_LIBRARY)
+ 	-$(DELDIR) $(DESTDIR)$(includedir)/freetype2/freetype/config
+ 	-$(DELETE) $(DESTDIR)$(includedir)/freetype2/freetype/*
+ 	-$(DELDIR) $(DESTDIR)$(includedir)/freetype2/freetype
+-	$(INSTALL_DATA) $(OBJ_BUILD)/ftconfig.h               \
++	$(INSTALL_DATA) -D $(OBJ_BUILD)/ftconfig.h               \
+           $(DESTDIR)$(includedir)/freetype2/config/ftconfig.h
+ 	$(INSTALL_DATA) $(OBJ_DIR)/ftmodule.h                 \
+           $(DESTDIR)$(includedir)/freetype2/config/ftmodule.h
+-- 
+1.9.2
+
