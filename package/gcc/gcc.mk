@@ -162,8 +162,8 @@ endif
 
 ifeq ($(BR2_SOFT_FLOAT),y)
 # only mips*-*-*, arm*-*-* and sparc*-*-* accept --with-float
-# powerpc seems to be needing it as well
-ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
+# powerpc seems to be needing it as well, and parisc, too.
+ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc)$(BR2_parisc),y)
 HOST_GCC_COMMON_CONF_OPT += --with-float=soft
 endif
 endif
