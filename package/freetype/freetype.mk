@@ -53,6 +53,13 @@ else
 FREETYPE_CONF_OPT += --without-png
 endif
 
+# FIXME! Should not be needed
+define FREETYPE_COPY_FTHEADER
+	mkdir -vp $(STAGING_DIR)/usr/include/freetype2/config
+	cp -vf $(@D)/include/config/ftheader.h $(STAGING_DIR)/usr/include/freetype2/config/ftheader.h
+endef
+FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_COPY_FTHEADER
+
 # Extra fixing since includedir and libdir are expanded from configure values
 define FREETYPE_FIX_CONFIG_FILE
 	$(SED) 's:^includedir=.*:includedir="$${prefix}/include":' \
