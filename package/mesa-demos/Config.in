@@ -1,0 +1,8 @@
+menuconfig BR2_PACKAGE_MESA_DEMOS
+	bool "Mesa 3D Demos"
+	depends on BR2_PACKAGE_MESA3D
+	select BR2_PACKAGE_GLEW
+	help
+	  Mesa 3D demos.
+
+	  http://mesa3d.org
