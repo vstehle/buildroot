@@ -1,0 +1,33 @@
+TODO!
+-----
+
+- Comparer un peu plus avec 75720db391376ef23b92e504c43f9972efd53141 xtensa
+- Comparer un peu plus avec microblaze, tout récent
+- Re-lire la partied codingstyle de la doc
+
+- Boot sur la hp712 !
+	- Revenir sur un kernel plus vieux ?
+	- Revenir sur une glibc 2.17 ?
+	- Ajouter des patches glibc 2.18 hppa ?
+	- Comparer les binaires de l'époque ?
+
+- Hack getty
+- Busybox _pas_ static ?
+- Documenter le board/readme pour hp712
+- Submit !
+
+
+Plus tard...
+------------
+
+- Plus d'options de toolchain
+	delay slot ?
+	long calls ?
+	schedule !
+	static ?
+
+- Rebaser le patch glibc 2.18 hppa en 2.19
+- Ajouter le support ramdisk lifimage
+- Faire marcher eglibc
+- Faire marcher uclibc
+- palo: rebuilder iplboot tant qu'on y est ?
