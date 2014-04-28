@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PALO
+	bool "palo"
+	help
+	  Palo is the PA-RISC Linux kernel loader.
+
+	  http://www.tldp.org/HOWTO/PA-RISC-Linux-Boot-HOWTO/palo.html
