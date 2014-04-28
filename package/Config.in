@@ -848,6 +848,9 @@ source "package/pcre/Config.in"
 source "package/popt/Config.in"
 source "package/readline/Config.in"
 source "package/slang/Config.in"
+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+source "package/dos2unix/Config.in"
+endif
 endmenu
 
 endmenu
