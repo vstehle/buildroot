@@ -1,10 +1,18 @@
-# architecture
 BR2_hppa=y
 
 # toolchain
 # Use gcc 4.7, as gcc 4.8 breaks the build.
 BR2_GCC_VERSION_4_7_X=y
 
+BR2_CCACHE=y
+BR2_CCACHE_DIR="/exported/buildbot/ccache-vincent"
+BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600=y
+
 # kernel
 BR2_LINUX_KERNEL=y
 BR2_LINUX_KERNEL_DEFCONFIG="712"
+BR2_LINUX_KERNEL_LIFIMAGE_CMDLINE="0/vmlinuz HOME=/ console=ttyB0 root=/dev/nfs nfsroot=10.0.0.1:/tftpboot/hp ip=bootp rw init=/our-init"
+BR2_PACKAGE_GDB=y
+BR2_PACKAGE_GDB_DEBUGGER=y
+BR2_PACKAGE_TREE=y
