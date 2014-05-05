@@ -1,8 +1,11 @@
-# architecture
 BR2_hppa=y
 
 BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600=y
 
+BR2_CCACHE=y
+BR2_CCACHE_DIR="/exported/buildbot/ccache-vincent"
+
 # kernel
 BR2_LINUX_KERNEL=y
 BR2_LINUX_KERNEL_DEFCONFIG="712"
+BR2_LINUX_KERNEL_LIFIMAGE_CMDLINE="0/vmlinuz HOME=/ console=ttyB0 root=/dev/nfs nfsroot=10.0.0.1:/tftpboot/hp ip=bootp rw init=/our-init"
