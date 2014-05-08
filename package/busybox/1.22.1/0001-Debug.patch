@@ -1,0 +1,25 @@
+From 10016557a670ac2cc35211d8ec19242f28bd3cb9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Fri, 9 May 2014 11:41:36 +0200
+Subject: [PATCH] Debug!
+
+---
+ shell/ash.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/shell/ash.c b/shell/ash.c
+index 71ef9a6..a3a693b 100644
+--- a/shell/ash.c
++++ b/shell/ash.c
+@@ -27,7 +27,7 @@
+  * debugging info will be written to ./trace and a quit signal
+  * will generate a core dump.
+  */
+-#define DEBUG 0
++#define DEBUG 2
+ /* Tweak debug output verbosity here */
+ #define DEBUG_TIME 0
+ #define DEBUG_PID 1
+-- 
+1.9.2
+
