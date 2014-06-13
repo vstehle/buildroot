@@ -1,0 +1,8 @@
+BR2_hppa=y
+BR2_CCACHE=y
+BR2_CCACHE_DIR="/exported/buildbot/ccache-vincent"
+BR2_BINUTILS_VERSION_2_26_X=y
+BR2_GCC_VERSION_6_X=y
+BR2_INIT_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
