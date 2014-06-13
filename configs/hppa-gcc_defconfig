@@ -1,0 +1,5 @@
+BR2_hppa=y
+BR2_GCC_VERSION_4_7_X=y
+BR2_INIT_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
