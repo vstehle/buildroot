@@ -1,0 +1,32 @@
+From 1334b5535ab2ceb72d2f45ab45d1ab680e2e0df0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Sat, 16 Aug 2014 22:09:49 +0200
+Subject: [PATCH] ARM: Force machine = NSLU2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Allows to boot from RedBoot properly.
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+---
+ arch/arm/kernel/head.S | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm/kernel/head.S b/arch/arm/kernel/head.S
+index 2c35f0f..463739f 100644
+--- a/arch/arm/kernel/head.S
++++ b/arch/arm/kernel/head.S
+@@ -114,6 +114,9 @@ ENTRY(stext)
+ 	ldr	r8, =PLAT_PHYS_OFFSET		@ always constant in this case
+ #endif
+ 
++	/* Force machine = NSLU2. */
++	ldr	r1, =597
++
+ 	/*
+ 	 * r1 = machine no, r2 = atags or dtb,
+ 	 * r8 = phys_offset, r9 = cpuid, r10 = procinfo
+-- 
+2.0.1
+

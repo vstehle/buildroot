@@ -1,0 +1,25 @@
+# architecture
+BR2_armeb=y
+BR2_xscale=y
+
+# system
+BR2_TARGET_GENERIC_GETTY=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+
+# Kernel
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_PATCH="board/nslu2/linux-0001-ARM-Force-machine-NSLU2.patch"
+BR2_LINUX_KERNEL_DEFCONFIG="ixp4xx"
+BR2_LINUX_KERNEL_ZIMAGE=y
+
+# firmware for the ethernet port
+BR2_PACKAGE_NPE_FIRMWARE=y
+
+# filesystem
+BR2_TARGET_ROOTFS_CPIO_GZIP=y
+BR2_TARGET_ROOTFS_INITRAMFS=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+# bootloader
+BR2_TARGET_APEX=y
+BR2_TARGET_APEX_BOARDNAME="nslu2"
