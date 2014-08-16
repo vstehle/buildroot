@@ -1,0 +1,12 @@
+config BR2_PACKAGE_NPE_FIRMWARE
+	bool "npe-firmware"
+	depends on BR2_armeb	# Only relevant for IXP4XX
+	help
+	  Firmware for the IXP4XX NPE (Network Processor Engine).
+
+	  For some IXP4XX platforms, this firmware is necessary even for basic
+	  ethernet functionality. This is the case of e.g. the Linksys NSLU2.
+
+	  This is the version of the firmware without crypto.
+
+	  https://downloadcenter.intel.com/Detail_Desc.aspx?DwnldID=12954
