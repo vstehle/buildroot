@@ -1,0 +1,15 @@
+config BR2_TARGET_APEX
+	bool "apex"
+	depends on BR2_armeb
+	help
+	  The apex bootloader.
+	  It is used on IXP4XX platforms, such as the NSLU2.
+	  TODO!
+
+if BR2_TARGET_APEX
+config BR2_TARGET_APEX_BOARDNAME
+	string "Apex board name"
+	help
+	  Name of the board for which apex should be built. This will be
+	  suffixed with _config to meet Apex standard naming.
+endif
