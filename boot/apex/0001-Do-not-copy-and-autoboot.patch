@@ -1,0 +1,35 @@
+From 03eb3d82e35920fca50922cd16efbc534c176935 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Sat, 7 May 2016 17:01:32 +0200
+Subject: [PATCH] Do not copy and autoboot
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+---
+ src/mach-ixp42x/nslu2_config | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/src/mach-ixp42x/nslu2_config b/src/mach-ixp42x/nslu2_config
+index 385e26e..ff5c70a 100644
+--- a/src/mach-ixp42x/nslu2_config
++++ b/src/mach-ixp42x/nslu2_config
+@@ -137,11 +137,10 @@ CONFIG_NOR_BOOT=y
+ #
+ # Default Startup
+ #
+-CONFIG_AUTOBOOT=y
+-CONFIG_AUTOBOOT_DELAY=10
+-CONFIG_ENV_STARTUP_KERNEL_COPY=y
++CONFIG_AUTOBOOT=n
++CONFIG_ENV_STARTUP_KERNEL_COPY=n
+ # CONFIG_ENV_REGION_KERNEL_SWAP is not set
+-CONFIG_ENV_STARTUP_RAMDISK_COPY=y
++CONFIG_ENV_STARTUP_RAMDISK_COPY=n
+ # CONFIG_ENV_REGION_RAMDISK_SWAP is not set
+ # CONFIG_ENV_STARTUP_PREFIX_P is not set
+ 
+-- 
+2.8.1
+
