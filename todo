@@ -1,0 +1,21 @@
+- NPE firmware
+	+ Document commit message
+
+- Apex
+	+ Add URLs to the Config
+	+ Document commit message
+
+- nslu2 config
+	+ Boot with apex
+	+ remove linux patch
+	+ separate ramdisk
+	+ Add a readme in board nslu2
+	+ Document commit message
+
+- Upstream !
+
+Later...
+--------
+
+- Generate a firmware image
+	+ need to package host tool slugimage
