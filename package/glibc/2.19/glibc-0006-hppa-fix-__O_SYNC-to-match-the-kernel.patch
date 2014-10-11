@@ -1,0 +1,25 @@
+From 6263707806a8312dafbb94a8b29d4524734ee216 Mon Sep 17 00:00:00 2001
+From: John David Anglin <dave.anglin@bell.net>
+Date: Sun, 10 Aug 2014 10:00:23 -0400
+Subject: [PATCH 6/6] hppa: fix __O_SYNC to match the kernel
+
+---
+ ports/sysdeps/unix/sysv/linux/hppa/bits/fcntl.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ports/sysdeps/unix/sysv/linux/hppa/bits/fcntl.h b/ports/sysdeps/unix/sysv/linux/hppa/bits/fcntl.h
+index f596d5f..24b564c 100644
+--- a/ports/sysdeps/unix/sysv/linux/hppa/bits/fcntl.h
++++ b/ports/sysdeps/unix/sysv/linux/hppa/bits/fcntl.h
+@@ -27,7 +27,7 @@
+ #define O_NONBLOCK	00200004 /* HPUX has separate NDELAY & NONBLOCK */
+ #define __O_DSYNC	01000000
+ #define __O_RSYNC	02000000 /* HPUX only */
+-#define __O_SYNC	01000000
++#define __O_SYNC	00100000
+ #define O_SYNC		(__O_SYNC|__O_DSYNC)
+ 
+ #define O_BLKSEEK	00000100 /* HPUX only */
+-- 
+2.1.1
+

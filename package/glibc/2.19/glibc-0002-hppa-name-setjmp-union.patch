@@ -1,0 +1,31 @@
+From d6d494108a10d1e781f50a62166d7b4544890b70 Mon Sep 17 00:00:00 2001
+From: John David Anglin <dave.anglin@bell.net>
+Date: Sun, 10 Aug 2014 09:36:50 -0400
+Subject: [PATCH 2/6] hppa: name setjmp union
+
+Some of the C++ tests want this, and this is what all other arches
+have done, so do it on hppa too.
+
+2013-07-07  John David Anglin  <dave.anglin@bell.net>
+
+	* ports/sysdeps/hppa/bits/setjmp.h: Name anonymous union.
+---
+ ports/sysdeps/hppa/bits/setjmp.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ports/sysdeps/hppa/bits/setjmp.h b/ports/sysdeps/hppa/bits/setjmp.h
+index 9a404e7..de05899 100644
+--- a/ports/sysdeps/hppa/bits/setjmp.h
++++ b/ports/sysdeps/hppa/bits/setjmp.h
+@@ -38,7 +38,7 @@
+    * 10 x 64-bit fprs in this order:
+      - fr12-fr21 (callee saves)
+    Note: We have 8 bytes of free space for future uses.  */
+-typedef union
++typedef union __jmp_buf_internal
+   {
+     struct __jmp_buf_internal_tag
+       {
+-- 
+2.1.1
+
