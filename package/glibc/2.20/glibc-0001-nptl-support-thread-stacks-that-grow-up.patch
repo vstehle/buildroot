@@ -1,0 +1,157 @@
+From 75fcd7e88043b1245114c37b67ee372013c4e75d Mon Sep 17 00:00:00 2001
+From: Carlos O'Donell <carlos@systemhalted.org>
+Date: Fri, 16 Aug 2013 14:57:59 -0400
+Subject: [PATCH 1/6] nptl: support thread stacks that grow up
+
+http://bugs.gentoo.org/301642
+---
+ nptl/allocatestack.c      | 22 +++++++++++++++-------
+ nptl/pthread_create.c     | 19 ++++++++++++++++---
+ nptl/pthread_getattr_np.c | 13 +++++++++++--
+ 3 files changed, 42 insertions(+), 12 deletions(-)
+
+diff --git a/nptl/allocatestack.c b/nptl/allocatestack.c
+index d95ffe9..563e185 100644
+--- a/nptl/allocatestack.c
++++ b/nptl/allocatestack.c
+@@ -372,6 +372,15 @@ allocate_stack (const struct pthread_attr *attr, struct pthread **pdp,
+   if (__glibc_unlikely (attr->flags & ATTR_FLAG_STACKADDR))
+     {
+       uintptr_t adj;
++#if _STACK_GROWS_DOWN
++      char * stackaddr = (char *) attr->stackaddr;
++#else
++      /* Assume the same layout as the _STACK_GROWS_DOWN case,
++	 with struct pthread at the top of the stack block.
++	 Later we adjust the guard location and stack address
++	 to match the _STACK_GROWS_UP case.  */
++      char * stackaddr = (char *) attr->stackaddr + attr->stacksize;
++#endif
+ 
+       /* If the user also specified the size of the stack make sure it
+ 	 is large enough.  */
+@@ -381,11 +390,11 @@ allocate_stack (const struct pthread_attr *attr, struct pthread **pdp,
+ 
+       /* Adjust stack size for alignment of the TLS block.  */
+ #if TLS_TCB_AT_TP
+-      adj = ((uintptr_t) attr->stackaddr - TLS_TCB_SIZE)
++      adj = ((uintptr_t) stackaddr - TLS_TCB_SIZE)
+ 	    & __static_tls_align_m1;
+       assert (size > adj + TLS_TCB_SIZE);
+ #elif TLS_DTV_AT_TP
+-      adj = ((uintptr_t) attr->stackaddr - __static_tls_size)
++      adj = ((uintptr_t) stackaddr - __static_tls_size)
+ 	    & __static_tls_align_m1;
+       assert (size > adj);
+ #endif
+@@ -395,10 +404,10 @@ allocate_stack (const struct pthread_attr *attr, struct pthread **pdp,
+ 	 the stack.  It is the user's responsibility to do this if it
+ 	 is wanted.  */
+ #if TLS_TCB_AT_TP
+-      pd = (struct pthread *) ((uintptr_t) attr->stackaddr
++      pd = (struct pthread *) ((uintptr_t) stackaddr
+ 			       - TLS_TCB_SIZE - adj);
+ #elif TLS_DTV_AT_TP
+-      pd = (struct pthread *) (((uintptr_t) attr->stackaddr
++      pd = (struct pthread *) (((uintptr_t) stackaddr
+ 				- __static_tls_size - adj)
+ 			       - TLS_PRE_TCB_SIZE);
+ #endif
+@@ -410,7 +419,7 @@ allocate_stack (const struct pthread_attr *attr, struct pthread **pdp,
+       pd->specific[0] = pd->specific_1stblock;
+ 
+       /* Remember the stack-related values.  */
+-      pd->stackblock = (char *) attr->stackaddr - size;
++      pd->stackblock = (char *) stackaddr - size;
+       pd->stackblock_size = size;
+ 
+       /* This is a user-provided stack.  It will not be queued in the
+@@ -636,7 +645,7 @@ allocate_stack (const struct pthread_attr *attr, struct pthread **pdp,
+ 	  char *guard = mem + (((size - guardsize) / 2) & ~pagesize_m1);
+ #elif _STACK_GROWS_DOWN
+ 	  char *guard = mem;
+-# elif _STACK_GROWS_UP
++#elif _STACK_GROWS_UP
+ 	  char *guard = (char *) (((uintptr_t) pd - guardsize) & ~pagesize_m1);
+ #endif
+ 	  if (mprotect (guard, guardsize, PROT_NONE) != 0)
+@@ -732,7 +741,6 @@ allocate_stack (const struct pthread_attr *attr, struct pthread **pdp,
+   *stack = stacktop;
+ #elif _STACK_GROWS_UP
+   *stack = pd->stackblock;
+-  assert (*stack > 0);
+ #endif
+ 
+   return 0;
+diff --git a/nptl/pthread_create.c b/nptl/pthread_create.c
+index b9af010..cbacecc 100644
+--- a/nptl/pthread_create.c
++++ b/nptl/pthread_create.c
+@@ -403,12 +403,25 @@ start_thread (void *arg)
+ #ifdef _STACK_GROWS_DOWN
+   char *sp = CURRENT_STACK_FRAME;
+   size_t freesize = (sp - (char *) pd->stackblock) & ~pagesize_m1;
+-#else
+-# error "to do"
+-#endif
+   assert (freesize < pd->stackblock_size);
+   if (freesize > PTHREAD_STACK_MIN)
+     __madvise (pd->stackblock, freesize - PTHREAD_STACK_MIN, MADV_DONTNEED);
++#else
++  /* Page aligned start of memory to free (higher than or equal
++     to current sp plus the minimum stack size).  */
++  void *freeblock = (void*)((size_t)(CURRENT_STACK_FRAME
++				     + PTHREAD_STACK_MIN
++				     + pagesize_m1)
++				    & ~pagesize_m1);
++  char *free_end = (char *) (((uintptr_t) pd - pd->guardsize) & ~pagesize_m1);
++  /* Is there any space to free?  */
++  if (free_end > (char *)freeblock)
++    {
++      size_t freesize = (size_t)(free_end - (char *)freeblock);
++      assert (freesize < pd->stackblock_size);
++      __madvise (freeblock, freesize, MADV_DONTNEED);
++    }
++#endif
+ 
+   /* If the thread is detached free the TCB.  */
+   if (IS_DETACHED (pd))
+diff --git a/nptl/pthread_getattr_np.c b/nptl/pthread_getattr_np.c
+index 21110c3..623b840 100644
+--- a/nptl/pthread_getattr_np.c
++++ b/nptl/pthread_getattr_np.c
+@@ -60,7 +60,11 @@ pthread_getattr_np (thread_id, attr)
+   if (__glibc_likely (thread->stackblock != NULL))
+     {
+       iattr->stacksize = thread->stackblock_size;
++#ifdef _STACK_GROWS_DOWN
+       iattr->stackaddr = (char *) thread->stackblock + iattr->stacksize;
++#else
++      iattr->stackaddr = (char *) thread->stackblock;
++#endif
+     }
+   else
+     {
+@@ -129,12 +133,17 @@ pthread_getattr_np (thread_id, attr)
+ 		         stack extension request.  */
+ 		      iattr->stacksize = (iattr->stacksize
+ 					  & -(intptr_t) GLRO(dl_pagesize));
+-
++#if _STACK_GROWS_DOWN
+ 		      /* The limit might be too high.  */
+ 		      if ((size_t) iattr->stacksize
+ 			  > (size_t) iattr->stackaddr - last_to)
+ 			iattr->stacksize = (size_t) iattr->stackaddr - last_to;
+-
++#else
++		      /* The limit might be too high.  */
++		      if ((size_t) iattr->stacksize
++			  > to - (size_t) iattr->stackaddr)
++			iattr->stacksize = to - (size_t) iattr->stackaddr;
++#endif
+ 		      /* We succeed and no need to look further.  */
+ 		      ret = 0;
+ 		      break;
+-- 
+2.1.1
+
