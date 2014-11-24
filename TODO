@@ -1,0 +1,17 @@
+* or1ksim
+	+ license
+	+ hash
+	+ Config description
+
+* binutils
+	+ version 2.25 or1k
+
+* gcc version
+* gdb version
+* linux version
+* Plus de !BR2_openrisc un peu partout (toolchain?)
+
+* uclibc
+	+ enlever hack "utils"
+
+* Merge patch openocd

@@ -1,0 +1,39 @@
+From 076a6804e77bc5ba169a47ae0ab695c8330d4a43 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Sat, 27 Dec 2014 21:52:13 +0100
+Subject: [PATCH] Hack! No strverscmp
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+---
+ include/platform.h | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/include/platform.h b/include/platform.h
+index cfc8029..38b3f35 100644
+--- a/include/platform.h
++++ b/include/platform.h
+@@ -371,7 +371,6 @@ typedef unsigned smalluint;
+ #define HAVE_STRCHRNUL 1
+ #define HAVE_STRSEP 1
+ #define HAVE_STRSIGNAL 1
+-#define HAVE_STRVERSCMP 1
+ #define HAVE_VASPRINTF 1
+ #define HAVE_UNLOCKED_STDIO 1
+ #define HAVE_UNLOCKED_LINE_OPS 1
+@@ -381,9 +380,7 @@ typedef unsigned smalluint;
+ #define HAVE_NET_ETHERNET_H 1
+ #define HAVE_SYS_STATFS_H 1
+ 
+-#if defined(__UCLIBC__) && UCLIBC_VERSION < KERNEL_VERSION(0, 9, 32)
+-# undef HAVE_STRVERSCMP
+-#endif
++#undef HAVE_STRVERSCMP
+ 
+ #if defined(__dietlibc__)
+ # undef HAVE_STRCHRNUL
+-- 
+2.1.4
+
