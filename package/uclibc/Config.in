@@ -29,6 +29,10 @@ choice
 		bool "daily snapshot"
 		depends on !(BR2_arc)
 
+	config BR2_UCLIBC_VERSION_OPENRISC
+		bool "openrisc"
+		depends on BR2_openrisc
+
 endchoice
 
 config BR2_USE_UCLIBC_SNAPSHOT
@@ -44,6 +48,7 @@ config BR2_UCLIBC_VERSION_STRING
 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
 	default "arc-2014.08" if BR2_arc
 	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
+	default "085b9a1333e4d0c615613f862b12c30a46ea2788" if BR2_UCLIBC_VERSION_OPENRISC
 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
 
 config BR2_UCLIBC_CONFIG
@@ -53,6 +58,7 @@ config BR2_UCLIBC_CONFIG
 	default "package/uclibc/uClibc-snapshot.config" if BR2_arc
 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_XTENSA_GIT
+	default "package/uclibc/uClibc-openrisc.config" if BR2_UCLIBC_VERSION_OPENRISC
 	help
 	  Some people may wish to use their own modified uClibc configuration
 	  file and will specify their config file location with this option.

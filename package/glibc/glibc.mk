@@ -10,6 +10,9 @@ ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
 GLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc
 GLIBC_SOURCE = eglibc-$(GLIBC_VERSION).tar.bz2
 GLIBC_SRC_SUBDIR = libc
+else ifeq ($(BR2_openrisc),y)
+GLIBC_SITE = $(call github,openrisc,or1k-glibc,$(GLIBC_VERSION))
+GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.gz
 else
 GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
 GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
@@ -80,8 +83,8 @@ define GLIBC_CONFIGURE_CMDS
 		ac_cv_path_BASH_SHELL=/bin/bash \
 		libc_cv_forced_unwind=yes \
 		libc_cv_ssp=no \
-		--target=$(GNU_TARGET_NAME) \
-		--host=$(GNU_TARGET_NAME) \
+		--target=or1k-unknown-linux-gnu \
+		--host=or1k-unknown-linux-gnu \
 		--build=$(GNU_HOST_NAME) \
 		--prefix=/usr \
 		--enable-shared \

@@ -17,6 +17,9 @@ UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
 else ifeq ($(BR2_UCLIBC_VERSION_XTENSA_GIT),y)
 UCLIBC_SITE = git://git.busybox.net/uClibc
 UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
+else ifeq ($(BR2_UCLIBC_VERSION_OPENRISC),y)
+UCLIBC_SITE =  $(call github,openrisc,uClibc-or1k,$(UCLIBC_VERSION))
+UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
 else
 UCLIBC_SITE = http://www.uclibc.org/downloads
 UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.xz
@@ -410,7 +413,7 @@ endif
 
 UCLIBC_MAKE_FLAGS = \
 	ARCH="$(UCLIBC_TARGET_ARCH)" \
-	CROSS_COMPILE="$(TARGET_CROSS)" \
+	CROSS_COMPILE="$(CCACHE) $(HOST_DIR)/usr/bin/or1k-unknown-linux-gnu-" \
 	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
 	HOSTCC="$(HOSTCC)"
 
@@ -527,6 +530,17 @@ define UCLIBC_INSTALL_STAGING_CMDS
 		RUNTIME_PREFIX=/ \
 		install_runtime install_dev
 	$(UCLIBC_INSTALL_UTILS_STAGING)
+	ln -svf or1k-unknown-linux-gnu-gcc $(HOST_DIR)/usr/bin/or1k-buildroot-linux-uclibc-gcc
+	ln -svf or1k-unknown-linux-gnu-ar $(HOST_DIR)/usr/bin/or1k-buildroot-linux-uclibc-ar
+	ln -svf or1k-unknown-linux-gnu-ld $(HOST_DIR)/usr/bin/or1k-buildroot-linux-uclibc-ld
+	ln -svf or1k-unknown-linux-gnu-objcopy $(HOST_DIR)/usr/bin/or1k-buildroot-linux-uclibc-objcopy
+	ln -svf or1k-unknown-linux-gnu-nm $(HOST_DIR)/usr/bin/or1k-buildroot-linux-uclibc-nm
+	ln -svf or1k-unknown-linux-gnu-strip $(HOST_DIR)/usr/bin/or1k-buildroot-linux-uclibc-strip
+	ln -svf or1k-unknown-linux-gnu-cpp $(HOST_DIR)/usr/bin/or1k-buildroot-linux-uclibc-cpp
+	$(INSTALL) -D -m 0644 $(@D)/libpthread/linuxthreads/sysdeps/pthread/pthread.h $(STAGING_DIR)/usr/include/pthread.h
+	$(INSTALL) -D -m 0644 $(@D)/libpthread/linuxthreads/sysdeps/pthread/bits/pthreadtypes.h $(STAGING_DIR)/usr/include/bits/pthreadtypes.h
+	$(INSTALL) -D -m 0644 $(@D)/include/bits/initspin.h $(STAGING_DIR)/usr/include/bits/initspin.h
+	$(INSTALL) -D -m 0644 $(@D)/include/bits/sigthread.h $(STAGING_DIR)/usr/include/bits/sigthread.h
 endef
 
 $(eval $(kconfig-package))

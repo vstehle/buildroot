@@ -15,6 +15,9 @@ GCC_SITE = ftp://www.at91.com/pub/buildroot
 else ifeq ($(BR2_arc),y)
 GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
 GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+else ifeq ($(BR2_openrisc),y)
+GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
+GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
 else
 GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
 endif
@@ -94,6 +97,20 @@ HOST_GCC_COMMON_CONF_OPTS = \
 	--disable-multilib \
 	--with-gmp=$(HOST_DIR)/usr \
 	--with-mpfr=$(HOST_DIR)/usr
+
+ifeq ($(BR2_openrisc),y)
+HOST_GCC_COMMON_CONF_OPTS += \
+	--disable-libatomic \
+	--disable-libgomp \
+	--disable-libmudflap \
+	--disable-libquadmath \
+	--disable-libssp \
+	--disable-shared \
+	--disable-werror \
+	--enable-threads=single \
+	--target=or1k-unknown-linux-gnu \
+	--without-headers
+endif
 
 # Don't build documentation. It takes up extra space / build time,
 # and sometimes needs specific makeinfo versions to work

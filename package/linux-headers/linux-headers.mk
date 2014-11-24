@@ -49,6 +49,8 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
 			HOSTCXX="$(HOSTCXX)" \
 			INSTALL_HDR_PATH=$(STAGING_DIR)/usr \
 			headers_install)
+	$(INSTALL) -D -m 0644 $(@D)/include/linux/errno.h $(STAGING_DIR)/usr/include/linux/errno.h
+	$(INSTALL) -D -m 0644 $(@D)/include/uapi/linux/errno.h $(STAGING_DIR)/usr/include/uapi/linux/errno.h
 endef
 
 ifeq ($(BR2_KERNEL_HEADERS_VERSION),y)

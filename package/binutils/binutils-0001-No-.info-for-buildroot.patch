@@ -1,0 +1,465 @@
+From 2fe7659f888228667dca384aa82359d45bfd65d4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Mon, 24 Nov 2014 23:59:32 +0100
+Subject: [PATCH] No .info for buildroot
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+---
+ bfd/doc/Makefile.in      | 41 ++++++++++++++++----------------
+ binutils/doc/Makefile.in | 40 +++++++++++++++----------------
+ etc/Makefile.in          | 62 +++++++++++++++++++++++++-----------------------
+ gas/doc/Makefile.in      | 41 ++++++++++++++++----------------
+ gprof/Makefile.in        | 40 +++++++++++++++----------------
+ ld/Makefile.in           | 41 ++++++++++++++++----------------
+ 6 files changed, 135 insertions(+), 130 deletions(-)
+
+diff --git a/bfd/doc/Makefile.in b/bfd/doc/Makefile.in
+index 5156ba7..540551c 100644
+--- a/bfd/doc/Makefile.in
++++ b/bfd/doc/Makefile.in
+@@ -56,7 +56,7 @@ target_triplet = @target@
+ # Automake 1.9 will only build info files in the objdir if they are
+ # mentioned in DISTCLEANFILES.  It doesn't have to be unconditional,
+ # though, so we use a bogus condition.
+-@GENINSRC_NEVER_TRUE@am__append_1 = bfd.info
++#@GENINSRC_NEVER_TRUE@am__append_1 = bfd.info
+ subdir = doc
+ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+ 	$(bfd_TEXINFOS)
+@@ -86,7 +86,7 @@ CONFIG_CLEAN_VPATH_FILES =
+ depcomp =
+ am__depfiles_maybe =
+ SOURCES =
+-INFO_DEPS = bfd.info
++#INFO_DEPS = bfd.info
+ TEXINFO_TEX = $(top_srcdir)/../texinfo/texinfo.tex
+ am__TEXINFO_TEX_DIR = $(top_srcdir)/../texinfo
+ DVIS = bfd.dvi
+@@ -394,7 +394,8 @@ MOSTLYCLEANFILES = $(MKDOC) *.o
+ CLEANFILES = *.p *.ip
+ DISTCLEANFILES = bfd.?? bfd.??? bfd.h libbfd.h libcoff.h texput.log \
+ 	$(am__append_1)
+-MAINTAINERCLEANFILES = $(DOCFILES) bfd.info
++#MAINTAINERCLEANFILES = $(DOCFILES) bfd.info
++MAINTAINERCLEANFILES = $(DOCFILES)
+ all: all-am
+ 
+ .SUFFIXES:
+@@ -436,23 +437,23 @@ mostlyclean-libtool:
+ clean-libtool:
+ 	-rm -rf .libs _libs
+ 
+-bfd.info: bfd.texinfo $(bfd_TEXINFOS)
+-	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
+-	rm -rf $$backupdir && mkdir $$backupdir && \
+-	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
+-	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
+-	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
+-	  done; \
+-	else :; fi && \
+-	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
+-	 -o $@ `test -f 'bfd.texinfo' || echo '$(srcdir)/'`bfd.texinfo; \
+-	then \
+-	  rc=0; \
+-	else \
+-	  rc=$$?; \
+-	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
+-	fi; \
+-	rm -rf $$backupdir; exit $$rc
++#bfd.info: bfd.texinfo $(bfd_TEXINFOS)
++#	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
++#	rm -rf $$backupdir && mkdir $$backupdir && \
++#	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
++#	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
++#	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
++#	  done; \
++#	else :; fi && \
++#	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
++#	 -o $@ `test -f 'bfd.texinfo' || echo '$(srcdir)/'`bfd.texinfo; \
++#	then \
++#	  rc=0; \
++#	else \
++#	  rc=$$?; \
++#	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++#	fi; \
++#	rm -rf $$backupdir; exit $$rc
+ 
+ bfd.dvi: bfd.texinfo $(bfd_TEXINFOS) 
+ 	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
+diff --git a/binutils/doc/Makefile.in b/binutils/doc/Makefile.in
+index 596dbda..63053fc 100644
+--- a/binutils/doc/Makefile.in
++++ b/binutils/doc/Makefile.in
+@@ -84,7 +84,7 @@ CONFIG_CLEAN_VPATH_FILES =
+ depcomp =
+ am__depfiles_maybe =
+ SOURCES =
+-INFO_DEPS = binutils.info
++#INFO_DEPS = binutils.info
+ TEXINFO_TEX = $(top_srcdir)/../texinfo/texinfo.tex
+ am__TEXINFO_TEX_DIR = $(top_srcdir)/../texinfo
+ DVIS = binutils.dvi
+@@ -319,12 +319,12 @@ TEXI2DVI = texi2dvi -I "$(srcdir)" -I "$(top_srcdir)/../libiberty" \
+ 		    -I "$(top_srcdir)/../bfd/doc" -I ../../bfd/doc
+ 
+ MOSTLYCLEANFILES = $(DEMANGLER_NAME).1
+-MAINTAINERCLEANFILES = binutils.info
++#MAINTAINERCLEANFILES = binutils.info
+ 
+ # Automake 1.9 will only build info files in the objdir if they are
+ # mentioned in DISTCLEANFILES.  It doesn't have to be unconditional,
+ # though, so we use a bogus condition.
+-@GENINSRC_NEVER_TRUE@DISTCLEANFILES = binutils.info
++#@GENINSRC_NEVER_TRUE@DISTCLEANFILES = binutils.info
+ all: all-am
+ 
+ .SUFFIXES:
+@@ -366,23 +366,23 @@ mostlyclean-libtool:
+ clean-libtool:
+ 	-rm -rf .libs _libs
+ 
+-binutils.info: binutils.texi 
+-	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
+-	rm -rf $$backupdir && mkdir $$backupdir && \
+-	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
+-	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
+-	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
+-	  done; \
+-	else :; fi && \
+-	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
+-	 -o $@ `test -f 'binutils.texi' || echo '$(srcdir)/'`binutils.texi; \
+-	then \
+-	  rc=0; \
+-	else \
+-	  rc=$$?; \
+-	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
+-	fi; \
+-	rm -rf $$backupdir; exit $$rc
++#binutils.info: binutils.texi 
++#	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
++#	rm -rf $$backupdir && mkdir $$backupdir && \
++#	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
++#	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
++#	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
++#	  done; \
++#	else :; fi && \
++#	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
++#	 -o $@ `test -f 'binutils.texi' || echo '$(srcdir)/'`binutils.texi; \
++#	then \
++#	  rc=0; \
++#	else \
++#	  rc=$$?; \
++#	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++#	fi; \
++#	rm -rf $$backupdir; exit $$rc
+ 
+ binutils.dvi: binutils.texi  
+ 	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
+diff --git a/etc/Makefile.in b/etc/Makefile.in
+index 0d19c13..c5ce376 100644
+--- a/etc/Makefile.in
++++ b/etc/Makefile.in
+@@ -58,41 +58,43 @@ TEXIDIR = $(srcdir)/../texinfo
+ #### Host, target, and site specific Makefile fragments come in here.
+ ###
+ 
+-INFOFILES = standards.info configure.info
++#INFOFILES = standards.info configure.info
+ DVIFILES = standards.dvi configure.dvi
+ PDFFILES = standards.pdf configure.pdf
+ HTMLFILES = standards.html configure.html
+ 
+-all: info
+-install install-strip: install-info
++#all: info
++all:
++#install install-strip: install-info
++install install-strip:
+ 
+ uninstall:
+ 
+-info:
+-	for f in $(INFOFILES); do \
+-	  if test -f $(srcdir)/`echo $$f | sed -e 's/.info$$/.texi/'`; then \
+-	    if $(MAKE) "MAKEINFO=$(MAKEINFO)" $$f; then \
+-	      true; \
+-	    else \
+-	      exit 1; \
+-	    fi; \
+-	  fi; \
+-	done
+-
+-install-info: info
+-	$(SHELL) $(srcdir)/../mkinstalldirs $(DESTDIR)$(infodir)
+-	if test ! -f standards.info; then cd $(srcdir); fi; \
+-	if test -f standards.info; then \
+-	  for i in standards.info*; do \
+-	    $(INSTALL_DATA) $$i $(DESTDIR)$(infodir)/$$i; \
+-	  done; \
+-	fi
+-	if test ! -f configure.info; then cd $(srcdir); fi; \
+-	if test -f configure.info; then \
+-	  for i in configure.info*; do \
+-	    $(INSTALL_DATA) $$i $(DESTDIR)$(infodir)/$$i; \
+-	  done; \
+-	fi
++#info:
++#	for f in $(INFOFILES); do \
++#	  if test -f $(srcdir)/`echo $$f | sed -e 's/.info$$/.texi/'`; then \
++#	    if $(MAKE) "MAKEINFO=$(MAKEINFO)" $$f; then \
++#	      true; \
++#	    else \
++#	      exit 1; \
++#	    fi; \
++#	  fi; \
++#	done
++
++#install-info: info
++#	$(SHELL) $(srcdir)/../mkinstalldirs $(DESTDIR)$(infodir)
++#	if test ! -f standards.info; then cd $(srcdir); fi; \
++#	if test -f standards.info; then \
++#	  for i in standards.info*; do \
++#	    $(INSTALL_DATA) $$i $(DESTDIR)$(infodir)/$$i; \
++#	  done; \
++#	fi
++#	if test ! -f configure.info; then cd $(srcdir); fi; \
++#	if test -f configure.info; then \
++#	  for i in configure.info*; do \
++#	    $(INSTALL_DATA) $$i $(DESTDIR)$(infodir)/$$i; \
++#	  done; \
++#	fi
+ 
+ html:
+ 	for f in $(HTMLFILES); do \
+@@ -157,8 +159,8 @@ install-pdf: pdf
+ 	  done; \
+ 	fi
+ 
+-standards.info: $(srcdir)/standards.texi $(srcdir)/make-stds.texi
+-	$(MAKEINFO) --no-split -I$(srcdir) -o standards.info $(srcdir)/standards.texi
++#standards.info: $(srcdir)/standards.texi $(srcdir)/make-stds.texi
++#	$(MAKEINFO) --no-split -I$(srcdir) -o standards.info $(srcdir)/standards.texi
+ 
+ standards.html: $(srcdir)/standards.texi $(srcdir)/make-stds.texi
+ 	$(TEXI2HTML) --no-split -I$(srcdir) -o standards.html $(srcdir)/standards.texi
+diff --git a/gas/doc/Makefile.in b/gas/doc/Makefile.in
+index 4c3c4fb..47f088d 100644
+--- a/gas/doc/Makefile.in
++++ b/gas/doc/Makefile.in
+@@ -82,7 +82,7 @@ CONFIG_CLEAN_VPATH_FILES =
+ depcomp =
+ am__depfiles_maybe =
+ SOURCES =
+-INFO_DEPS = as.info
++#INFO_DEPS = as.info
+ TEXINFO_TEX = $(top_srcdir)/../texinfo/texinfo.tex
+ am__TEXINFO_TEX_DIR = $(top_srcdir)/../texinfo
+ DVIS = as.dvi
+@@ -343,7 +343,8 @@ CPU_DOCS = \
+ 
+ # This one isn't ready for prime time yet.  Not even a little bit.
+ noinst_TEXINFOS = internals.texi
+-MAINTAINERCLEANFILES = asconfig.texi as.info
++#MAINTAINERCLEANFILES = asconfig.texi as.info
++MAINTAINERCLEANFILES = asconfig.texi
+ BASEDIR = $(srcdir)/../..
+ BFDDIR = $(BASEDIR)/bfd
+ CONFIG_STATUS_DEPENDENCIES = $(BFDDIR)/configure.in
+@@ -351,7 +352,7 @@ CONFIG_STATUS_DEPENDENCIES = $(BFDDIR)/configure.in
+ # Automake 1.9 will only build info files in the objdir if they are
+ # mentioned in DISTCLEANFILES.  It doesn't have to be unconditional,
+ # though, so we use a bogus condition.
+-@GENINSRC_NEVER_TRUE@DISTCLEANFILES = as.info
++#@GENINSRC_NEVER_TRUE@DISTCLEANFILES = as.info
+ all: all-am
+ 
+ .SUFFIXES:
+@@ -393,23 +394,23 @@ mostlyclean-libtool:
+ clean-libtool:
+ 	-rm -rf .libs _libs
+ 
+-as.info: as.texinfo $(as_TEXINFOS)
+-	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
+-	rm -rf $$backupdir && mkdir $$backupdir && \
+-	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
+-	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
+-	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
+-	  done; \
+-	else :; fi && \
+-	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
+-	 -o $@ `test -f 'as.texinfo' || echo '$(srcdir)/'`as.texinfo; \
+-	then \
+-	  rc=0; \
+-	else \
+-	  rc=$$?; \
+-	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
+-	fi; \
+-	rm -rf $$backupdir; exit $$rc
++#as.info: as.texinfo $(as_TEXINFOS)
++#	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
++#	rm -rf $$backupdir && mkdir $$backupdir && \
++#	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
++#	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
++#	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
++#	  done; \
++#	else :; fi && \
++#	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
++#	 -o $@ `test -f 'as.texinfo' || echo '$(srcdir)/'`as.texinfo; \
++#	then \
++#	  rc=0; \
++#	else \
++#	  rc=$$?; \
++#	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++#	fi; \
++#	rm -rf $$backupdir; exit $$rc
+ 
+ as.dvi: as.texinfo $(as_TEXINFOS) 
+ 	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
+diff --git a/gprof/Makefile.in b/gprof/Makefile.in
+index 3a5bcdc..9cd3abb 100644
+--- a/gprof/Makefile.in
++++ b/gprof/Makefile.in
+@@ -112,7 +112,7 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+ 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+ 	$(LDFLAGS) -o $@
+ SOURCES = $(gprof_SOURCES)
+-INFO_DEPS = gprof.info
++#INFO_DEPS = gprof.info
+ am__TEXINFO_TEX_DIR = $(srcdir)/../texinfo
+ DVIS = gprof.dvi
+ PDFS = gprof.pdf
+@@ -335,12 +335,12 @@ gprof_TEXINFOS = config.texi
+ man_MANS = gprof.1
+ AM_MAKEINFOFLAGS = -I "$(srcdir)" -I "$(top_srcdir)/../bfd/doc" -I ../bfd/doc
+ TEXI2DVI = texi2dvi -I "$(srcdir)" -I "$(top_srcdir)/../bfd/doc" -I ../bfd/doc
+-MAINTAINERCLEANFILES = gprof.info
++#MAINTAINERCLEANFILES = gprof.info
+ 
+ # Automake 1.9 will only build info files in the objdir if they are
+ # mentioned in DISTCLEANFILES.  It doesn't have to be unconditional,
+ # though, so we use a bogus condition.
+-@GENINSRC_NEVER_TRUE@DISTCLEANFILES = gprof.info
++#@GENINSRC_NEVER_TRUE@DISTCLEANFILES = gprof.info
+ all: $(BUILT_SOURCES) gconfig.h
+ 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+ 
+@@ -508,23 +508,23 @@ clean-libtool:
+ distclean-libtool:
+ 	-rm -f libtool config.lt
+ 
+-gprof.info: gprof.texi $(gprof_TEXINFOS)
+-	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
+-	rm -rf $$backupdir && mkdir $$backupdir && \
+-	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
+-	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
+-	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
+-	  done; \
+-	else :; fi && \
+-	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
+-	 -o $@ `test -f 'gprof.texi' || echo '$(srcdir)/'`gprof.texi; \
+-	then \
+-	  rc=0; \
+-	else \
+-	  rc=$$?; \
+-	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
+-	fi; \
+-	rm -rf $$backupdir; exit $$rc
++#gprof.info: gprof.texi $(gprof_TEXINFOS)
++#	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
++#	rm -rf $$backupdir && mkdir $$backupdir && \
++#	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
++#	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
++#	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
++#	  done; \
++#	else :; fi && \
++#	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
++#	 -o $@ `test -f 'gprof.texi' || echo '$(srcdir)/'`gprof.texi; \
++#	then \
++#	  rc=0; \
++#	else \
++#	  rc=$$?; \
++#	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++#	fi; \
++#	rm -rf $$backupdir; exit $$rc
+ 
+ gprof.dvi: gprof.texi $(gprof_TEXINFOS) 
+ 	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
+diff --git a/ld/Makefile.in b/ld/Makefile.in
+index 0848160..10c3a6b 100644
+--- a/ld/Makefile.in
++++ b/ld/Makefile.in
+@@ -58,7 +58,7 @@ bin_PROGRAMS = ld-new$(EXEEXT)
+ # Automake 1.9 will only build info files in the objdir if they are
+ # mentioned in DISTCLEANFILES.  It doesn't have to be unconditional,
+ # though, so we use a bogus condition.
+-@GENINSRC_NEVER_TRUE@am__append_1 = ld.info
++#@GENINSRC_NEVER_TRUE@am__append_1 = ld.info
+ subdir = .
+ DIST_COMMON = NEWS README ChangeLog $(srcdir)/Makefile.in \
+ 	$(srcdir)/Makefile.am $(top_srcdir)/configure \
+@@ -136,7 +136,7 @@ LTYACCCOMPILE = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+ 	--mode=compile $(YACC) $(YFLAGS) $(AM_YFLAGS)
+ SOURCES = $(libldtestplug_la_SOURCES) $(ld_new_SOURCES) \
+ 	$(EXTRA_ld_new_SOURCES)
+-INFO_DEPS = ld.info
++#INFO_DEPS = ld.info
+ am__TEXINFO_TEX_DIR = $(srcdir)/../texinfo
+ DVIS = ld.dvi
+ PDFS = ld.pdf
+@@ -927,7 +927,8 @@ ld_new_LDADD = $(EMULATION_OFILES) $(EMUL_EXTRA_OFILES) $(BFDLIB) $(LIBIBERTY) $
+ @ENABLE_PLUGINS_TRUE@libldtestplug_la_SOURCES = testplug.c
+ @ENABLE_PLUGINS_TRUE@libldtestplug_la_CFLAGS = -g -O2
+ @ENABLE_PLUGINS_TRUE@libldtestplug_la_LDFLAGS = -no-undefined -rpath /nowhere
+-MAINTAINERCLEANFILES = configdoc.texi ld.1 ld.info
++#MAINTAINERCLEANFILES = configdoc.texi ld.1 ld.info
++MAINTAINERCLEANFILES = configdoc.texi ld.1
+ 
+ # We want to reconfigure if configure.host or configure.tgt changes.  We
+ # extract version from bfd/configure.in, so we must depend on that also.
+@@ -1521,23 +1522,23 @@ clean-libtool:
+ distclean-libtool:
+ 	-rm -f libtool config.lt
+ 
+-ld.info: ld.texinfo $(ld_TEXINFOS)
+-	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
+-	rm -rf $$backupdir && mkdir $$backupdir && \
+-	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
+-	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
+-	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
+-	  done; \
+-	else :; fi && \
+-	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
+-	 -o $@ `test -f 'ld.texinfo' || echo '$(srcdir)/'`ld.texinfo; \
+-	then \
+-	  rc=0; \
+-	else \
+-	  rc=$$?; \
+-	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
+-	fi; \
+-	rm -rf $$backupdir; exit $$rc
++#ld.info: ld.texinfo $(ld_TEXINFOS)
++#	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
++#	rm -rf $$backupdir && mkdir $$backupdir && \
++#	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
++#	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
++#	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
++#	  done; \
++#	else :; fi && \
++#	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
++#	 -o $@ `test -f 'ld.texinfo' || echo '$(srcdir)/'`ld.texinfo; \
++#	then \
++#	  rc=0; \
++#	else \
++#	  rc=$$?; \
++#	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++#	fi; \
++#	rm -rf $$backupdir; exit $$rc
+ 
+ ld.dvi: ld.texinfo $(ld_TEXINFOS) 
+ 	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
+-- 
+2.1.1
+

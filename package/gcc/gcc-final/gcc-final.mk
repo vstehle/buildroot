@@ -80,6 +80,7 @@ define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
 			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
 	fi
 	if [ ! -e $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc ]; then \
+		mkdir -p $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin; \
 		ln -snf gcc $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc; \
 	fi
 endef

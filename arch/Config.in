@@ -142,6 +142,11 @@ config BR2_nios2
 	  http://www.altera.com/
 	  http://en.wikipedia.org/wiki/Nios_II
 
+config BR2_openrisc
+	bool "OpenRISC"
+	help
+	  TODO!
+
 config BR2_powerpc
 	bool "PowerPC"
 	help
@@ -345,6 +350,10 @@ endif
 
 if BR2_nios2
 source "arch/Config.in.nios2"
+endif
+
+if BR2_openrisc
+source "arch/Config.in.openrisc"
 endif
 
 if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le

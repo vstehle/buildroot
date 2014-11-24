@@ -1,0 +1,29 @@
+From 982f1ab8f1b470ed408d9c3e06308881bdade8e3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Wed, 26 Nov 2014 00:39:03 +0100
+Subject: [PATCH] openrisc: vmlinux.lds.S: s/or32/or1k/
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+---
+ arch/openrisc/kernel/vmlinux.lds.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/openrisc/kernel/vmlinux.lds.S b/arch/openrisc/kernel/vmlinux.lds.S
+index 2d69a85..8c4e492 100644
+--- a/arch/openrisc/kernel/vmlinux.lds.S
++++ b/arch/openrisc/kernel/vmlinux.lds.S
+@@ -30,7 +30,7 @@
+ #include <asm/cache.h>
+ #include <asm-generic/vmlinux.lds.h>
+ 
+-OUTPUT_FORMAT("elf32-or32", "elf32-or32", "elf32-or32")
++OUTPUT_FORMAT("elf32-or1k", "elf32-or1k", "elf32-or1k")
+ jiffies = jiffies_64 + 4;
+ 
+ SECTIONS
+-- 
+2.1.1
+

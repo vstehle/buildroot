@@ -24,6 +24,10 @@ BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,
 BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
 BINUTILS_FROM_GIT = y
 endif
+ifeq ($(BR2_openrisc),y)
+BINUTILS_SITE = $(call github,openrisc,or1k-src,$(BINUTILS_VERSION))
+BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
+endif
 BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
 BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.bz2
 BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
@@ -70,6 +74,22 @@ HOST_BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
 			--with-sysroot=$(STAGING_DIR) \
 			$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
 			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+
+ifeq ($(BR2_openrisc),y)
+HOST_BINUTILS_CONF_OPTS += \
+	--disable-gdb \
+	--disable-itcl \
+	--disable-libgloss \
+	--disable-libgui \
+	--disable-newlib \
+	--disable-rda \
+	--disable-sid \
+	--disable-sim \
+	--disable-tcl \
+	--disable-tk \
+	--disable-winsup \
+	--target=or1k-unknown-linux-gnu
+endif
 
 # We just want libbfd and libiberty, not the full-blown binutils in staging
 define BINUTILS_INSTALL_STAGING_CMDS

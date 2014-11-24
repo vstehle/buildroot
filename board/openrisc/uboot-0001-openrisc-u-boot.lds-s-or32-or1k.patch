@@ -1,0 +1,27 @@
+From 130ea5049a90711b9853b58a6d9e71b04e88cc3b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Wed, 26 Nov 2014 00:29:17 +0100
+Subject: [PATCH] openrisc: u-boot.lds: s/or32/or1k/
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+---
+ arch/openrisc/cpu/u-boot.lds | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/openrisc/cpu/u-boot.lds b/arch/openrisc/cpu/u-boot.lds
+index d9bb7b7..854088b 100644
+--- a/arch/openrisc/cpu/u-boot.lds
++++ b/arch/openrisc/cpu/u-boot.lds
+@@ -1,5 +1,5 @@
+ #include <config.h>
+-OUTPUT_ARCH(or32)
++OUTPUT_ARCH(or1k)
+ __DYNAMIC  =  0;
+ 
+ MEMORY
+-- 
+2.1.1
+
