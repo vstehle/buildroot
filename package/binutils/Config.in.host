@@ -3,7 +3,6 @@ comment "Binutils Options"
 choice
 	prompt "Binutils Version"
 	depends on !BR2_arc
-	default BR2_BINUTILS_VERSION_OPENRISC if BR2_openrisc
 	default BR2_BINUTILS_VERSION_2_24
 	help
 	  Select the version of binutils you wish to use.
@@ -30,10 +29,6 @@ choice
 		depends on !BR2_avr32 && !BR2_bfin
 		bool "binutils 2.25"
 
-	config BR2_BINUTILS_VERSION_OPENRISC
-		depends on BR2_openrisc
-		bool "binutils openrisc"
-
 endchoice
 
 config BR2_BINUTILS_VERSION
@@ -44,7 +39,6 @@ config BR2_BINUTILS_VERSION
 	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
 	default "2.24"		if BR2_BINUTILS_VERSION_2_24
 	default "2.25"		if BR2_BINUTILS_VERSION_2_25
-	default "d4889c03191ec5cbe8cb2168d5179777d8b72184" if BR2_BINUTILS_VERSION_OPENRISC
 
 config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
 	string "Additional binutils options"
