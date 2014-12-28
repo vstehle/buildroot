@@ -1,0 +1,4 @@
+config BR2_PACKAGE_HOST_OR1KSIM
+	bool "host or1ksim"
+	help
+	  TODO!
