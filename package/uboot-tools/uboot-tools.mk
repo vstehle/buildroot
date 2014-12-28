@@ -73,11 +73,13 @@ MKIMAGE = $(HOST_DIR)/usr/bin/mkimage
 # KERNEL_ARCH can be arm64 arc arm avr32 blackfin m68k microblaze mips nios2 powerpc sh sparc i386 x86_64 xtensa
 # For arm64, arc, xtensa we'll just keep KERNEL_ARCH
 # For mips64, we'll just keep mips
-# For i386 and x86_64, we need to convert
+# For i386, x86_64 and openrisc, we need to convert
 ifeq ($(KERNEL_ARCH),x86_64)
 MKIMAGE_ARCH = x86
 else ifeq ($(KERNEL_ARCH),i386)
 MKIMAGE_ARCH = x86
+else ifeq ($(KERNEL_ARCH),openrisc)
+MKIMAGE_ARCH = or1k
 else
 MKIMAGE_ARCH = $(KERNEL_ARCH)
 endif
