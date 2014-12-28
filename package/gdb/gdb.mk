@@ -19,6 +19,12 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
 GDB_FROM_GIT = y
 endif
 
+ifeq ($(BR2_openrisc),y)
+GDB_SITE = git://openrisc.net/jonas/gdb
+GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+GDB_FROM_GIT = y
+endif
+
 ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
 GDB_SITE = ftp://www.at91.com/pub/buildroot
 endif
@@ -43,6 +49,10 @@ endif
 # which is needed to read XML descriptions of target architectures. We
 # also need ncurses.
 HOST_GDB_DEPENDENCIES = host-expat host-ncurses
+
+ifeq ($(BR2_openrisc),y)
+HOST_GDB_DEPENDENCIES += host-or1ksim
+endif
 
 # Apply the Xtensa specific patches
 XTENSA_CORE_NAME = $(call qstrip, $(BR2_XTENSA_CORE_NAME))
