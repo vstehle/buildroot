@@ -17,6 +17,9 @@ UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
 else ifeq ($(BR2_UCLIBC_VERSION_XTENSA_GIT),y)
 UCLIBC_SITE = git://git.busybox.net/uClibc
 UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
+else ifeq ($(BR2_UCLIBC_VERSION_OPENRISC),y)
+UCLIBC_SITE = git://openrisc.net/jonas/uClibc
+UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
 else
 UCLIBC_SITE = http://www.uclibc.org/downloads
 UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.xz
@@ -473,9 +476,6 @@ endif
 define UCLIBC_BUILD_CMDS
 	$(UCLIBC_MAKE) -C $(@D) $(UCLIBC_MAKE_FLAGS) headers
 	$(UCLIBC_MAKE) -C $(@D) $(UCLIBC_MAKE_FLAGS)
-	$(MAKE) -C $(@D)/utils \
-		PREFIX=$(HOST_DIR) \
-		HOSTCC="$(HOSTCC)" hostutils
 endef
 
 ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
@@ -512,10 +512,7 @@ endef
 # STATIC has no ld* tools, only getconf
 ifeq ($(BR2_STATIC_LIBS),)
 define UCLIBC_INSTALL_UTILS_STAGING
-	$(INSTALL) -D -m 0755 $(@D)/utils/ldd.host $(HOST_DIR)/usr/bin/ldd
-	ln -sf ldd $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldd
-	$(INSTALL) -D -m 0755 $(@D)/utils/ldconfig.host $(HOST_DIR)/usr/bin/ldconfig
-	ln -sf ldconfig $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig
+	:
 endef
 endif
 

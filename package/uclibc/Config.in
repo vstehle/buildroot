@@ -29,6 +29,10 @@ choice
 		bool "daily snapshot"
 		depends on !(BR2_arc)
 
+	config BR2_UCLIBC_VERSION_OPENRISC
+		bool "openrisc"
+		depends on BR2_openrisc
+
 endchoice
 
 config BR2_USE_UCLIBC_SNAPSHOT
@@ -44,6 +48,7 @@ config BR2_UCLIBC_VERSION_STRING
 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
 	default "arc-2014.08" if BR2_arc
 	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
+	default "b9009a20c0d9e418894a3c2a3f148df1d89fec1e" if BR2_UCLIBC_VERSION_OPENRISC
 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
 
 config BR2_UCLIBC_CONFIG
@@ -53,6 +58,7 @@ config BR2_UCLIBC_CONFIG
 	default "package/uclibc/uClibc-snapshot.config" if BR2_arc
 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_XTENSA_GIT
+	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_OPENRISC
 	help
 	  Some people may wish to use their own modified uClibc configuration
 	  file and will specify their config file location with this option.
@@ -187,6 +193,7 @@ config BR2_UCLIBC_TARGET_ARCH
 	default bfin	   if BR2_bfin
 	default m68k	   if BR2_m68k
 	default mips	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+	default or32	   if BR2_openrisc
 	default powerpc	   if BR2_powerpc
 	default sh	   if BR2_sh
 	default sparc	   if BR2_sparc
