@@ -12,6 +12,7 @@ choice
 	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
 	default BR2_GCC_VERSION_4_9_X if BR2_microblaze || BR2_powerpc64le
 	default BR2_GCC_VERSION_4_5_X if BR2_bfin
+	default BR2_GCC_VERSION_OPENRISC if BR2_openrisc
 	default BR2_GCC_VERSION_4_8_X
 	help
 	  Select the version of gcc you wish to use.
@@ -84,6 +85,10 @@ choice
 		select BR2_GCC_NEEDS_MPC
 		select BR2_GCC_SUPPORTS_GRAPHITE
 
+	config BR2_GCC_VERSION_OPENRISC
+		bool "gcc openrisc"
+		depends on BR2_openrisc
+
 endchoice
 
 config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
@@ -98,6 +103,7 @@ config BR2_GCC_VERSION
 	default "4.8.4"     if BR2_GCC_VERSION_4_8_X
 	default "4.9.2"     if BR2_GCC_VERSION_4_9_X
 	default "arc-2014.08" if BR2_GCC_VERSION_4_8_ARC
+	default "6527ee4221e34193e756388cd68369ad8517c879" if BR2_GCC_VERSION_OPENRISC
 
 config BR2_EXTRA_GCC_CONFIG_OPTIONS
 	string "Additional gcc options"
