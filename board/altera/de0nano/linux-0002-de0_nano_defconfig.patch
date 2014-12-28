@@ -18,7 +18,7 @@ index 0000000..3c88bf4
 --- /dev/null
 +++ b/arch/openrisc/configs/de0_nano_defconfig
 @@ -0,0 +1,61 @@
-+CONFIG_CROSS_COMPILE="or32-linux-"
++CONFIG_CROSS_COMPILE="or1k-linux-"
 +CONFIG_LOG_BUF_SHIFT=14
 +CONFIG_BLK_DEV_INITRD=y
 +CONFIG_INITRAMFS_SOURCE="arch/openrisc/support/initramfs arch/openrisc/support/initramfs.devnodes"

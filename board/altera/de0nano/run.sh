@@ -16,7 +16,7 @@ openocd \
 
 o=$!
 
-or32-linux-gdb \
+or1k-linux-gdb \
 	-x ./board/altera/de0nano/run.gdb \
 	./output/images/vmlinux
 
