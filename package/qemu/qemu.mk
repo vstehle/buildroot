@@ -62,7 +62,7 @@ endif
 ifeq ($(HOST_QEMU_ARCH),sh4aeb)
 HOST_QEMU_ARCH = sh4eb
 endif
-HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user
+HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user $(HOST_QEMU_ARCH)-softmmu
 
 ifeq ($(BR2_PACKAGE_HOST_QEMU),y)
 HOST_QEMU_HOST_SYSTEM_TYPE = $(shell uname -s)
@@ -94,6 +94,7 @@ endif
 
 define HOST_QEMU_CONFIGURE_CMDS
 	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
+		--enable-system --enable-kvm --enable-curses \
 		--target-list="$(HOST_QEMU_TARGETS)"    \
 		--prefix="$(HOST_DIR)/usr"              \
 		--interp-prefix=$(STAGING_DIR)          \
