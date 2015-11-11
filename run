@@ -1,23 +1,18 @@
 #!/bin/sh
 set -eux
 
-output/host/usr/bin/qemu-system-x86_64 \
-	-cpu host \
-	-m 256 \
-	-nographic \
-	-kernel output/images/bzImage \
-	-initrd output/images/rootfs.cpio \
-	-append 'console=ttyS0 earlyprintk' \
-	-enable-kvm \
+xterm -e \
+	output/host/usr/bin/qemu-system-x86_64 \
+		-append 'console=ttyS0 earlyprintk' \
+		-cpu host \
+		-enable-kvm \
+		-initrd output/images/rootfs.cpio \
+		-kernel output/images/bzImage \
+		-m 256 \
+		-nographic \
+		-s -S \
+	&
 
-# -S              freeze CPU at startup (use 'c' to start execution)
-# -s              shorthand for -gdb tcp::1234
-
-# -trace [events=<file>][,file=<file>]
-#                 specify tracing options
-# During emulation, the following keys are useful:
-# ctrl-alt-f      toggle full screen
-# ctrl-alt-n      switch to virtual console 'n'
-# ctrl-alt        toggle mouse and keyboard grab
-# 
-# When using -nographic, press 'ctrl-a h' to get some help.
+output/host/usr/bin/x86_64-linux-gdb \
+	-x run.gdb \
+	output/build/linux-4.2/vmlinux
