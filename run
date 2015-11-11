@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eux
+
+output/host/usr/bin/qemu-x86_64 \
+
