@@ -1,0 +1,4 @@
+config BR2_PACKAGE_IRRLICHT
+	bool "irrlicht"
+	help
+	  Irrlicht.
