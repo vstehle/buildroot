@@ -83,4 +83,13 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
 	depends on BR2_USE_MMU
 	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 
+config BR2_PACKAGE_LINUX_TOOLS_TURBOSTAT
+	bool "turbostat"
+	select BR2_PACKAGE_LINUX_TOOLS
+	depends on BR2_i386 || BR2_x86_64
+	help
+	  The turbostat tools provides detailed information about
+	  the amount of time that the system spends in different states.
+
+
 endmenu
