@@ -353,6 +353,7 @@ endmenu
 	source "package/biosdevname/Config.in"
 	source "package/cc-tool/Config.in"
 	source "package/cdrkit/Config.in"
+	source "package/cpuid/Config.in"
 	source "package/cryptsetup/Config.in"
 	source "package/cwiid/Config.in"
 	source "package/dbus/Config.in"
