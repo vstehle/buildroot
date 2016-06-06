@@ -8,6 +8,7 @@ IRRLICHT_VERSION = 1.8.3
 IRRLICHT_SITE = http://downloads.sourceforge.net/irrlicht
 IRRLICHT_SOURCE = irrlicht-$(IRRLICHT_VERSION).zip
 IRRLICHT_INSTALL_STAGING = YES
+IRRLICHT_DEPENDENCIES = libgl xlib_libX11 xlib_libXext xproto_xf86vidmodeproto
 
 define IRRLICHT_EXTRACT_CMDS
 	$(UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(IRRLICHT_SOURCE)

@@ -33,7 +33,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
 	bool
 
 config BR2_PACKAGE_PROVIDES_LIBGL
-	default "mesa3d" if BR2_PACKAGE_MESA3D_DRI_DRIVER
+	default "mesa3d"
 
 config BR2_PACKAGE_MESA3D_DRIVER
 	bool

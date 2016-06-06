@@ -1,4 +1,6 @@
 config BR2_PACKAGE_IRRLICHT
 	bool "irrlicht"
+	depends on BR2_PACKAGE_HAS_LIBGL
+	depends on BR2_PACKAGE_XORG7
 	help
 	  Irrlicht.
