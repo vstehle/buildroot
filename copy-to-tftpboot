@@ -1,0 +1,18 @@
+#!/bin/bash
+set -eux
+
+pxe_files='/tftpboot/pxelinux/files'
+[ -e "$pxe_files" ] || mkdir -p "$pxe_files"
+
+rsync -avcP \
+	output/images/bzImage \
+	output/images/rootfs.cpio.gz \
+	"$pxe_files/"
+
+d='/tftpboot/buildroot'
+[ -e "$d" ] || mkdir -p "$d"
+
+tmp=$(mktemp -d)
+tar -C "$tmp" -xf output/images/rootfs.tar
+rsync -avcP "$tmp/" "$d/"
+rm -fr "$tmp"
