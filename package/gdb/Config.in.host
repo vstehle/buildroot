@@ -27,7 +27,7 @@ config BR2_PACKAGE_HOST_GDB_PYTHON
 
 config BR2_PACKAGE_HOST_GDB_SIM
 	bool "Simulator support"
-	depends on !BR2_arc && !BR2_microblaze
+	depends on !BR2_arc && !BR2_microblaze && !BR2_riscv32 && !BR2_riscv64
 	help
 	  This option enables the simulator support in the cross gdb.
 
@@ -41,12 +41,22 @@ choice
 
 	config BR2_GDB_VERSION_7_9
 		bool "gdb 7.9.x"
+		# Not supported on RISC-V
+		depends on !BR2_riscv32 && !BR2_riscv64
 
 	config BR2_GDB_VERSION_7_10
 		bool "gdb 7.10.x"
+		# Not supported on RISC-V
+		depends on !BR2_riscv32 && !BR2_riscv64
 
 	config BR2_GDB_VERSION_7_11
 		bool "gdb 7.11.x"
+		# Not supported on RISC-V
+		depends on !BR2_riscv32 && !BR2_riscv64
+
+	config BR2_GDB_VERSION_RISCV
+		bool "gdb RISC-V (TODO! which series?)"
+		depends on BR2_riscv32 || BR2_riscv64
 
 endchoice
 
@@ -58,6 +68,7 @@ config BR2_GDB_VERSION
 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
 	default "arc-2016.09-rc2-gdb" if BR2_arc
 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+	default "68f367bdc6fe4eb7c47b3eb3243d3e923ddebda2" if BR2_GDB_VERSION_RISCV
 	default "7.9.1"    if BR2_GDB_VERSION_7_9
 	default "7.10.1"   if BR2_GDB_VERSION_7_10 || !BR2_PACKAGE_HOST_GDB
 	default "7.11.1"   if BR2_GDB_VERSION_7_11
