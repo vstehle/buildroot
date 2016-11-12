@@ -423,6 +423,8 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
 	-e s/parisc64/parisc/ \
 	-e s/powerpc64.*/powerpc/ \
 	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+	-e s/riscv32.*/riscv/ \
+	-e s/riscv64.*/riscv/ \
 	-e s/sh.*/sh/ \
 	-e s/microblazeel/microblaze/)
 
