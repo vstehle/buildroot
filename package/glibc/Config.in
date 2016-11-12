@@ -8,7 +8,8 @@ config BR2_PACKAGE_GLIBC
 
 choice
 	prompt "glibc version"
-	default BR2_GLIBC_VERSION_2_23
+	default BR2_GLIBC_VERSION_2_23 if !BR2_riscv32 && !BR2_riscv64
+	default BR2_GLIBC_VERSION_RISCV if BR2_riscv32 || BR2_riscv64
 
 config BR2_GLIBC_VERSION_2_22
 	bool "2.22"
@@ -24,6 +25,10 @@ config BR2_GLIBC_VERSION_2_24
 	# See: https://sourceware.org/ml/libc-alpha/2016-08/msg00212.html
 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 
+config BR2_GLIBC_VERSION_RISCV
+	bool "RISC-V (2.24)"
+	depends on BR2_riscv32 || BR2_riscv64
+
 comment "glibc-2.24 needs kernel headers >= 3.2"
 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 
@@ -36,3 +41,4 @@ config BR2_GLIBC_VERSION_STRING
 	default "2.22" if BR2_GLIBC_VERSION_2_22
 	default "2.23" if BR2_GLIBC_VERSION_2_23
 	default "2.24" if BR2_GLIBC_VERSION_2_24
+	default "362afedda5c2e011beb63ce2717fe6ab627eb2cb" if BR2_GLIBC_VERSION_RISCV

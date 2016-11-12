@@ -5,8 +5,15 @@
 ################################################################################
 
 GLIBC_VERSION = $(call qstrip,$(BR2_GLIBC_VERSION_STRING))
+
+ifeq ($(filter y,$(BR2_riscv32) $(BR2_riscv64)),y)
+GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
+GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.gz
+else
 GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
 GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
+endif
+
 GLIBC_SRC_SUBDIR = .
 
 GLIBC_LICENSE = GPLv2+ (programs), LGPLv2.1+, BSD-3c, MIT (library)
