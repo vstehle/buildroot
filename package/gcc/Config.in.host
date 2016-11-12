@@ -3,6 +3,7 @@ comment "GCC Options"
 choice
 	prompt "GCC compiler Version"
 	default BR2_GCC_VERSION_ARC if BR2_arc
+	default BR2_GCC_VERSION_RISCV if BR2_riscv32 || BR2_riscv64
 	default BR2_GCC_VERSION_5_X
 	help
 	  Select the version of gcc you wish to use.
@@ -12,6 +13,7 @@ choice
 		# Broken or unsupported architectures
 		depends on !BR2_microblaze && !BR2_arc \
 			&& !BR2_powerpc64le && !BR2_nios2 && !BR2_bfin
+		depends on !BR2_riscv32 && !BR2_riscv64
 		# Broken or unsupported ARM cores
 		depends on !BR2_cortex_a12 && !BR2_cortex_a17
 		# Broken or unsupported PPC cores
@@ -36,10 +38,17 @@ choice
 		depends on BR2_arc
 		select BR2_TOOLCHAIN_GCC_AT_LEAST_6
 
+	config BR2_GCC_VERSION_RISCV
+		bool "gcc RISC-V (6.1)"
+		# Only supported architecture
+		depends on BR2_riscv32 || BR2_riscv64
+		select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+
 	config BR2_GCC_VERSION_4_9_X
 		bool "gcc 4.9.x"
 		# Broken or unsupported architectures
 		depends on !BR2_arc && !BR2_bfin
+		depends on !BR2_riscv32 && !BR2_riscv64
 		# Broken or unsupported ARM cores
 		depends on !BR2_cortex_a17
 		# Unsupported MIPS cores
@@ -61,6 +70,7 @@ choice
 		bool "gcc 5.x"
 		# Broken or unsupported architectures
 		depends on !BR2_arc && !BR2_bfin
+		depends on !BR2_riscv32 && !BR2_riscv64
 		# musl ppc64 unsupported
 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
 		# Unsupported MIPS cores
@@ -75,6 +85,7 @@ choice
 		# Broken or unsupported architectures
 		depends on !BR2_arc
 		depends on !BR2_microblaze
+		depends on !BR2_riscv32 && !BR2_riscv64
 		# Unsupported MIPS cores
 		depends on !BR2_mips_m6250 && !BR2_mips_p6600
 		select BR2_TOOLCHAIN_GCC_AT_LEAST_6
@@ -99,6 +110,7 @@ config BR2_GCC_VERSION
 	default "5.4.0"     if BR2_GCC_VERSION_5_X
 	default "6.2.0"     if BR2_GCC_VERSION_6_X
 	default "arc-2016.09-rc2" if BR2_GCC_VERSION_ARC
+	default "879263a2c8384f9c9e679505186148fc41e40f84" if BR2_GCC_VERSION_RISCV
 
 config BR2_EXTRA_GCC_CONFIG_OPTIONS
 	string "Additional gcc options"
