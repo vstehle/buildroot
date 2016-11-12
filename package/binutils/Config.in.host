@@ -11,18 +11,29 @@ choice
 		bool "binutils 2.25.1"
 		# supported but broken on Blackfin
 		depends on !BR2_bfin
+		# Not supported on RISC-V
+		depends on !BR2_riscv32 && !BR2_riscv64
 
 	config BR2_BINUTILS_VERSION_2_26_X
 		bool "binutils 2.26.1"
+		# Not supported on RISC-V
+		depends on !BR2_riscv32 && !BR2_riscv64
 
 	config BR2_BINUTILS_VERSION_2_27_X
 		bool "binutils 2.27"
+		# Not supported on RISC-V
+		depends on !BR2_riscv32 && !BR2_riscv64
+
+	config BR2_BINUTILS_VERSION_RISCV
+		bool "binutils RISC-V (TODO! which 2.x series?)"
+		depends on BR2_riscv32 || BR2_riscv64
 
 endchoice
 
 config BR2_BINUTILS_VERSION
 	string
 	default "arc-2016.09-rc2"	if BR2_arc
+	default "49d8e1089b52102827113a9deb2a5627cf0b46eb" if BR2_BINUTILS_VERSION_RISCV
 	default "2.25.1"	if BR2_BINUTILS_VERSION_2_25_X
 	default "2.26.1"	if BR2_BINUTILS_VERSION_2_26_X
 	default "2.27"		if BR2_BINUTILS_VERSION_2_27_X
