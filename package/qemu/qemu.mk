@@ -4,9 +4,15 @@
 #
 ################################################################################
 
+ifeq ($(filter y,$(BR2_riscv32) $(BR2_riscv64)),y)
+QEMU_VERSION = b12cfa344681687c7adbc5fa66590182df3748b9
+QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.gz
+QEMU_SITE = $(call github,riscv,riscv-qemu,$(QEMU_VERSION))
+else
 QEMU_VERSION = 2.7.0
 QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
 QEMU_SITE = http://wiki.qemu.org/download
+endif
 QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
 QEMU_LICENSE_FILES = COPYING COPYING.LIB
 # NOTE: there is no top-level license file for non-(L)GPL licenses;
@@ -36,6 +42,8 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
 #       powerpc         ppc
 #       powerpc64       ppc64
 #       powerpc64le     ppc64le
+#       riscv32         riscv32
+#       riscv64         riscv64
 #       sh2a            not supported
 #       sh4             sh4
 #       sh4eb           sh4eb

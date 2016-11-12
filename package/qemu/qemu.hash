@@ -1,2 +1,5 @@
 # Locally computed, tarball verified with GPG signature
 sha256 326e739506ba690daf69fc17bd3913a6c313d9928d743bd8eddb82f403f81e53  qemu-2.7.0.tar.bz2
+
+# Locally calculated (fetched from Github)
+sha512  dc145b011ab0e00a1c990febc00818937c7e9754c497cbb2b6c20de64b463bc955d52bd3595028b5fc23f9ab03b7d8307a6e050b108331aa5ce2de16a49a7e82  qemu-b12cfa344681687c7adbc5fa66590182df3748b9.tar.gz
