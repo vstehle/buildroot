@@ -1,0 +1,26 @@
+From 9faea5dbb34c12a8054bf0b8b604d871c0054357 Mon Sep 17 00:00:00 2001
+From: Andrew Waterman <waterman@cs.berkeley.edu>
+Date: Mon, 11 Jul 2016 18:50:20 -0700
+Subject: [PATCH 06/10] Fix implementation of pte_huge
+
+h/t @terpstra
+---
+ arch/riscv/include/asm/pgtable.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 0ffb152..12e5d90 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -195,7 +195,7 @@ static inline int pte_write(pte_t pte)
+ static inline int pte_huge(pte_t pte)
+ {
+ 	return pte_present(pte)
+-		&& !(pte_val(pte) & (_PAGE_READ | _PAGE_WRITE | _PAGE_EXEC));
++		&& (pte_val(pte) & (_PAGE_READ | _PAGE_WRITE | _PAGE_EXEC));
+ }
+ 
+ /* static inline int pte_exec(pte_t pte) */
+-- 
+2.10.2
+

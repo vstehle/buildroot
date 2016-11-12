@@ -1,0 +1,30 @@
+From 0ad6573c4f03e75f5db371539c95388bdb1f17f9 Mon Sep 17 00:00:00 2001
+From: Andrew Waterman <waterman@cs.berkeley.edu>
+Date: Sun, 9 Oct 2016 14:58:38 -0700
+Subject: [PATCH 08/10] Mark PUM sequences as volatile, so they aren't
+ reordered
+
+---
+ arch/riscv/include/asm/uaccess.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
+index d1c246a..b7532de1 100644
+--- a/arch/riscv/include/asm/uaccess.h
++++ b/arch/riscv/include/asm/uaccess.h
+@@ -11,8 +11,10 @@
+ #include <asm/asm.h>
+ 
+ #ifdef CONFIG_RV_PUM
+-#define __enable_user_access() __asm__ ("csrc sstatus, %0" : : "r" (SR_PUM))
+-#define __disable_user_access() __asm__ ("csrs sstatus, %0" : : "r" (SR_PUM))
++#define __enable_user_access()						\
++	__asm__ __volatile__ ("csrc sstatus, %0" : : "r" (SR_PUM))
++#define __disable_user_access()						\
++	__asm__ __volatile__ ("csrs sstatus, %0" : : "r" (SR_PUM))
+ #else
+ #define __enable_user_access()
+ #define __disable_user_access()
+-- 
+2.10.2
+

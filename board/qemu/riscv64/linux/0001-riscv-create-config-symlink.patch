@@ -1,0 +1,28 @@
+From 916474489db7ee7d82e38e714914ead9ff602e7b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Mon, 14 Nov 2016 13:50:25 +0100
+Subject: [PATCH] riscv: create config symlink
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Buildroot wants a kernel config suffixed with _defconfig. Create a symbolic
+link for that.
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+---
+ arch/riscv/configs/riscv64_qemu_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 120000 arch/riscv/configs/riscv64_qemu_defconfig
+
+diff --git a/arch/riscv/configs/riscv64_qemu_defconfig b/arch/riscv/configs/riscv64_qemu_defconfig
+new file mode 120000
+index 0000000..ae15da5
+--- /dev/null
++++ b/arch/riscv/configs/riscv64_qemu_defconfig
+@@ -0,0 +1 @@
++riscv64_qemu
+\ No newline at end of file
+-- 
+2.10.2
+
