@@ -13,6 +13,11 @@ GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
 ifeq ($(BR2_arc),y)
 GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
 GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+GCC_FROM_GIT = y
+else ifeq ($(filter y,$(BR2_riscv32) $(BR2_riscv64)),y)
+GCC_SITE = $(call github,riscv,riscv-gcc,$(GCC_VERSION))
+GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+GCC_FROM_GIT = y
 else
 GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
 endif
@@ -181,7 +186,7 @@ else
 HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
 endif
 
-ifeq ($(BR2_arc),y)
+ifeq ($(GCC_FROM_GIT),y)
 HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
 endif
 
