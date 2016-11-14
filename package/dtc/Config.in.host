@@ -7,3 +7,12 @@ config BR2_PACKAGE_HOST_DTC
 	  Install host tools: dtc, convert-dtsv0, fdtdump, fdtget and fdtput.
 
 	  https://git.kernel.org/cgit/utils/dtc/dtc.git
+
+if BR2_PACKAGE_HOST_DTC
+
+config BR2_PACKAGE_HOST_DTC_INSTALL_LIBS
+	bool "host dtc install libraries"
+	help
+	  TODO!
+
+endif
