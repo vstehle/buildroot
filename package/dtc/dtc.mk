@@ -13,6 +13,12 @@ DTC_INSTALL_STAGING = YES
 DTC_DEPENDENCIES = host-bison host-flex
 HOST_DTC_DEPENDENCIES = host-bison host-flex
 
+HOST_DTC_INSTALL_GOALS = install-bin
+
+ifeq ($(BR2_PACKAGE_HOST_DTC_INSTALL_LIBS),y)
+HOST_DTC_INSTALL_GOALS += install-lib install-includes
+endif
+
 define DTC_POST_INSTALL_TARGET_RM_DTDIFF
 	rm -f $(TARGET_DIR)/usr/bin/dtdiff
 endef
@@ -51,7 +57,7 @@ define HOST_DTC_BUILD_CMDS
 endef
 
 define HOST_DTC_INSTALL_CMDS
-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install-bin
+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr $(HOST_DTC_INSTALL_GOALS)
 endef
 
 $(eval $(generic-package))
