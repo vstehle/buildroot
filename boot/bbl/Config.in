@@ -1,0 +1,7 @@
+config BR2_TARGET_BBL
+	bool "Bbl"
+	depends on BR2_riscv32 || BR2_riscv64
+	depends on BR2_LINUX_KERNEL
+	help
+	  RISC-V
+	  TODO!
