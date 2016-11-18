@@ -128,4 +128,12 @@ config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
 
 endif # aufs
 
+#-------------------------------------------------------------------------------
+# RISC-V
+config BR2_LINUX_KERNEL_EXT_RISCV
+	bool "RISC-V Linux"
+	select BR2_PACKAGE_RISCV_LINUX
+	help
+	  TODO!
+
 endmenu
