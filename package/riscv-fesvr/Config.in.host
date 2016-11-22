@@ -1,0 +1,5 @@
+config BR2_PACKAGE_HOST_RISCV_FESVR
+	bool "host RISC-V fesvr"
+	help
+	  Host RISC-V fesvr
+	  TODO!
