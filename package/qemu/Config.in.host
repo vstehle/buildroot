@@ -21,6 +21,8 @@ comment "Emulators selection"
 
 config BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
 	bool "Enable system emulation"
+	select BR2_PACKAGE_HOST_DTC
+	select BR2_PACKAGE_HOST_DTC_INSTALL_LIBS
 	help
 	  Enables the build of the system emulator, which allows to
 	  boot an entire system in Qemu.
