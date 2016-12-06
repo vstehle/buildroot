@@ -1,18 +1,13 @@
 buildroot kernel risc-v !!! extension ?
 doc: this is 1.9 ISA
 
+Trouver qui a raison pour les encodings (MUCOUNTEREN...) et aligner une bonne
+fois pour toute
+
 Upstream patches
 ----------------
 buildroot
 riscv-isa-sim
 riscv-pk
-
-Offsets
--------
-(a-la-riscv)
-riscv-tools/riscv-fesvr/fesvr/encoding.h:#define CSR_MUCOUNTEREN 0x320
-riscv-tools/riscv-gnu-toolchain/riscv-binutils-gdb/include/opcode/riscv-opc.h:#define CSR_MUCOUNTEREN 0x320
-riscv-tools/riscv-isa-sim/riscv/encoding.h:#define CSR_MUCOUNTEREN 0x310
-riscv-tools/riscv-pk/machine/encoding.h:#define CSR_MUCOUNTEREN 0x310
-riscv-tools/riscv-tests/env/encoding.h:#define CSR_MUCOUNTEREN 0x320
-riscv-qemu/target-riscv/cpu_bits.h:#define CSR_MUCOUNTEREN 0x310
+riscv-binutils-gdb
+riscv-fesvr
