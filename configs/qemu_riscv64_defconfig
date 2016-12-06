@@ -1,10 +1,6 @@
 # Architecture
 BR2_riscv64=y
 
-# TODO! remove
-BR2_CCACHE=y
-BR2_CCACHE_DIR="/exported/buildbot/ccache-vincent"
-
 # Patches
 BR2_GLOBAL_PATCH_DIR="board/qemu/riscv64"
 
