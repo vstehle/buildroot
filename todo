@@ -1,20 +1,11 @@
-kernel !!!
+buildroot kernel risc-v !!! extension ?
 doc: this is 1.9 ISA
-align binutils <-> gdb versions
 
 Upstream patches
 ----------------
-buildroot dtc, qemu
+buildroot
 riscv-isa-sim
 riscv-pk
-
-Mettre sur la latest
---------------------
-riscv-binutils-gdb
-riscv-pk
-riscv-fesvr
-riscv-qemu
-riscv-isa-sim
 
 Offsets
 -------
