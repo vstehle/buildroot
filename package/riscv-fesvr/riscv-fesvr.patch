@@ -1,0 +1,153 @@
+From ba13deec59bc871e1f91d10a386c0430f317785a Mon Sep 17 00:00:00 2001
+From: Xavier Roumegue <xroumegue@gmail.com>
+Date: Wed, 7 Dec 2016 17:00:48 +0100
+Subject: [PATCH] Add fesvr-zynq
+
+Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
+---
+ fesvr/fesvr.mk.in        |  3 +++
+ fesvr/fesvr_zynq.cc      | 14 ++++++++++++
+ fesvr/zynq_tsi_driver.cc | 59 ++++++++++++++++++++++++++++++++++++++++++++++++
+ fesvr/zynq_tsi_driver.h  | 22 ++++++++++++++++++
+ 4 files changed, 98 insertions(+)
+ create mode 100644 fesvr/fesvr_zynq.cc
+ create mode 100644 fesvr/zynq_tsi_driver.cc
+ create mode 100644 fesvr/zynq_tsi_driver.h
+
+diff --git a/fesvr/fesvr.mk.in b/fesvr/fesvr.mk.in
+index efd5514..85191ce 100644
+--- a/fesvr/fesvr.mk.in
++++ b/fesvr/fesvr.mk.in
+@@ -14,6 +14,7 @@ fesvr_hdrs = \
+   device.h \
+   rfb.h \
+   tsi.h \
++  zynq_tsi_driver.h \
+ 
+ fesvr_srcs = \
+   elfloader.cc \
+@@ -30,6 +31,8 @@ fesvr_srcs = \
+   option_parser.cc \
+   term.cc \
+   tsi.cc \
++  zynq_tsi_driver.cc \
+ 
+ fesvr_install_prog_srcs = \
+   elf2hex.cc \
++  fesvr_zynq.cc \
+diff --git a/fesvr/fesvr_zynq.cc b/fesvr/fesvr_zynq.cc
+new file mode 100644
+index 0000000..a102b2f
+--- /dev/null
++++ b/fesvr/fesvr_zynq.cc
+@@ -0,0 +1,14 @@
++#include "zynq_tsi_driver.h"
++#include "fesvr/tsi.h"
++#include <vector>
++
++int main(int argc, char** argv)
++{
++  zynq_tsi_driver_t tsi_driver;
++  tsi_t tsi(std::vector<std::string>(argv + 1, argv + argc));
++
++  while(!tsi.done()){
++    tsi_driver.poll(&tsi);
++  }
++  return tsi.exit_code();
++}
+diff --git a/fesvr/zynq_tsi_driver.cc b/fesvr/zynq_tsi_driver.cc
+new file mode 100644
+index 0000000..c0d9927
+--- /dev/null
++++ b/fesvr/zynq_tsi_driver.cc
+@@ -0,0 +1,59 @@
++#include "zynq_tsi_driver.h"
++
++#include <sys/mman.h>
++#include <unistd.h>
++#include <fcntl.h>
++#include <assert.h>
++
++#define SAI_BASE_PADDR 0x43C00000L
++#define SAI_OUT_FIFO_DATA 0x00
++#define SAI_OUT_FIFO_COUNT 0x04
++#define SAI_IN_FIFO_DATA 0x08
++#define SAI_IN_FIFO_COUNT 0x0C
++#define SAI_SYS_RESET 0x10
++
++zynq_tsi_driver_t::zynq_tsi_driver_t()
++{
++    fd = open("/dev/mem", O_RDWR|O_SYNC);
++    assert(fd != -1);
++    dev = (uint8_t *) mmap(0, sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd, SAI_BASE_PADDR);
++    assert(dev != MAP_FAILED);
++
++    // reset the target
++    write(SAI_SYS_RESET, 1);
++    write(SAI_SYS_RESET, 0);
++}
++
++
++zynq_tsi_driver_t::~zynq_tsi_driver_t()
++{
++    munmap(dev, sysconf(_SC_PAGESIZE));
++    close(fd);
++}
++
++void zynq_tsi_driver_t::poll(tsi_t *tsi)
++{
++    while (read(SAI_OUT_FIFO_COUNT) > 0) {
++        uint32_t out_data = read(SAI_OUT_FIFO_DATA);
++        tsi->send_word(out_data);
++    }
++
++    while (tsi->data_available() && read(SAI_IN_FIFO_COUNT) > 0) {
++        uint32_t in_data = tsi->recv_word();
++        write(SAI_IN_FIFO_DATA, in_data);
++    }
++
++    tsi->switch_to_host();
++}
++
++uint32_t zynq_tsi_driver_t::read(int off)
++{
++    volatile uint32_t *ptr = (volatile uint32_t *) (this->dev + off);
++    return *ptr;
++}
++
++void zynq_tsi_driver_t::write(int off, uint32_t word)
++{
++    volatile uint32_t *ptr = (volatile uint32_t *) (this->dev + off);
++    *ptr = word;
++}
+diff --git a/fesvr/zynq_tsi_driver.h b/fesvr/zynq_tsi_driver.h
+new file mode 100644
+index 0000000..98e6871
+--- /dev/null
++++ b/fesvr/zynq_tsi_driver.h
+@@ -0,0 +1,22 @@
++#ifndef __ZYNQ_SAI_DRIVER_H
++#define __ZYNQ_SAI_DRIVER_H
++
++#include "fesvr/tsi.h"
++#include <stdint.h>
++
++class zynq_tsi_driver_t {
++  public:
++    zynq_tsi_driver_t();
++    ~zynq_tsi_driver_t();
++
++    void poll(tsi_t *tsi);
++
++  private:
++    uint8_t *dev;
++    int fd;
++
++    uint32_t read(int off);
++    void write(int off, uint32_t word);
++};
++
++#endif
+-- 
+2.10.2
+

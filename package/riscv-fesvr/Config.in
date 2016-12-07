@@ -1,0 +1,5 @@
+config BR2_PACKAGE_RISCV_FESVR
+	bool "RISC-V fesvr"
+	help
+	  Target RISC-V fesvr
+	  TODO!
