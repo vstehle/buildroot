@@ -1,0 +1,29 @@
+From ccf293b940683239c02f15e4825ad257b0f310ec Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Sun, 2 Apr 2017 18:42:20 +0200
+Subject: [PATCH] configure.ac: remove -Werror
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 1f9e5cfa..d9f9d4a4 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -296,7 +296,7 @@ AC_SUBST(ODP_ABI_COMPAT)
+ ##########################################################################
+ # Default warning setup
+ ##########################################################################
+-ODP_CFLAGS="$ODP_CFLAGS -W -Wall -Werror -Wstrict-prototypes -Wmissing-prototypes"
++ODP_CFLAGS="$ODP_CFLAGS -W -Wall -Wstrict-prototypes -Wmissing-prototypes"
+ ODP_CFLAGS="$ODP_CFLAGS -Wmissing-declarations -Wold-style-definition -Wpointer-arith"
+ ODP_CFLAGS="$ODP_CFLAGS -Wcast-align -Wnested-externs -Wcast-qual -Wformat-nonliteral"
+ ODP_CFLAGS="$ODP_CFLAGS -Wformat-security -Wundef -Wwrite-strings"
+-- 
+2.11.0
+
