@@ -1,6 +1,7 @@
 config BR2_PACKAGE_ODP
 	bool "odp"
 	depends on BR2_TOOLCHAIN_USES_GLIBC
+	depends on BR2_STATIC_LIBS || BR2_SHARED_STATIC_LIBS
 	select BR2_PACKAGE_OPENSSL
 	help
 	  TODO!
