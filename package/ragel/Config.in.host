@@ -1,0 +1,5 @@
+config BR2_PACKAGE_HOST_RAGEL
+	bool "host ragel"
+	select BR2_PACKAGE_HOST_COLM
+	help
+	  TODO!
