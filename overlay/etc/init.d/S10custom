@@ -1,0 +1,21 @@
+#! /bin/sh
+
+case "$1" in
+	start|"")
+		set -x
+		#mount -t debugfs nodev /sys/kernel/debug
+		trace-cmd stop
+		mount -t 9p tag0 /mnt
+		cd /mnt
+		trace-cmd extract
+		#trace-cmd report
+		exit 0
+		;;
+	stop)
+		exit 0
+		;;
+	*)
+		echo "Usage: urandom {start|stop}" >&2
+		exit 1
+		;;
+esac

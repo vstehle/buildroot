@@ -1,5 +1,7 @@
 #!/bin/sh
 
+exit 0
+
 SYSROOT="${1}"
 # Make sure we have enough version components
 HDR_VER="${2}.0.0"
