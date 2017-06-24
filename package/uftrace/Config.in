@@ -1,0 +1,20 @@
+config BR2_PACKAGE_UFTRACE
+	bool "uftrace"
+	depends on BR2_aarch64 || BR2_arm || BR2_x86_64
+	depends on !(BR2_arm && BR2_ARM_SOFT_FLOAT)
+	depends on BR2_PACKAGE_ELFUTILS
+	depends on BR2_TOOLCHAIN_USES_GLIBC
+	help
+	  A simple function call tracer for user programs.
+
+	  Note that the executable you want to trace should be compiled
+	  with -pg or -finstrument-functions option.
+
+	  https://github.com/namhyung/uftrace
+
+comment "uftrace needs a glibc toolchain and elfutils"
+	depends on BR2_aarch64 || BR2_arm || BR2_x86_64
+	depends on !BR2_PACKAGE_ELFUTILS || !BR2_TOOLCHAIN_USES_GLIBC
+
+comment "uftrace needs a toolchain with hardware floats on ARM"
+	depends on BR2_arm && BR2_ARM_SOFT_FLOAT
