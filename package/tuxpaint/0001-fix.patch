@@ -1,0 +1,50 @@
+From bc3acc53133d41def3a14f3924d9d164ff9473c2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Sun, 1 Oct 2017 20:35:23 +0200
+Subject: [PATCH] fix
+
+---
+ Makefile       | 2 +-
+ src/tuxpaint.c | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 730ed91..6edabee 100644
+--- a/Makefile
++++ b/Makefile
+@@ -987,7 +987,7 @@ tuxpaint:	obj/tuxpaint.o obj/i18n.o obj/im.o obj/cursor.o obj/pixels.o \
+ 	@echo "...Linking Tux Paint..."
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $(DEBUG_FLAGS) $(SDL_CFLAGS) $(FRIBIDI_CFLAGS) $(DEFS) \
+ 		-o tuxpaint $^ \
+-		$(SDL_LIBS) $(SVG_LIB) $(ARCH_LINKS)
++		$(SDL_LIBS) $(SVG_LIB) $(ARCH_LINKS) -lm
+ 	@$(RSRC_CMD)
+ 	@$(MIMESET_CMD)
+ 
+diff --git a/src/tuxpaint.c b/src/tuxpaint.c
+index afa90ab..ac33ece 100644
+--- a/src/tuxpaint.c
++++ b/src/tuxpaint.c
+@@ -509,6 +509,9 @@ static void mtw(wchar_t * wtok, char * tok)
+ 
+ #include "compiler.h"
+ 
++#ifndef FALSE
++# define FALSE 0
++#endif
+ 
+ //EP added #ifndef __APPLE__ because macros are buggy (shifted by 1 byte), plus the function exists in SDL
+ #ifndef __APPLE__
+@@ -1939,8 +1942,8 @@ static SDL_Surface * load_kpx(char * file);
+ static SDL_Surface * load_svg(char * file);
+ static float pick_best_scape(unsigned int orig_w, unsigned int orig_h,
+                       unsigned int max_w, unsigned int max_h);
+-static SDL_Surface * myIMG_Load_RWops(char * file);
+ #endif
++static SDL_Surface * myIMG_Load_RWops(char * file);
+ static SDL_Surface * myIMG_Load(char * file);
+ static int trash(char * path);
+ int file_exists(char * path);
+-- 
+2.14.1
+
