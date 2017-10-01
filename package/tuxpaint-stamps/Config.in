@@ -1,0 +1,4 @@
+config BR2_PACKAGE_TUXPAINT_STAMPS
+	bool "tuxpaint-stamps"
+	help
+	  TODO
