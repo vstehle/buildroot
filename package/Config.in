@@ -243,6 +243,7 @@ menu "Games"
 	source "package/supertux/Config.in"
 	source "package/supertuxkart/Config.in"
 	source "package/tuxpaint-stamps/Config.in"
+	source "package/tuxpaint/Config.in"
 endmenu
 
 menu "Graphic libraries and applications (graphic/text)"

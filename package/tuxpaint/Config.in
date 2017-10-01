@@ -1,0 +1,17 @@
+config BR2_PACKAGE_TUXPAINT
+	bool "tuxpaint"
+	depends on BR2_PACKAGE_PANGO
+	depends on BR2_PACKAGE_SDL
+	depends on BR2_PACKAGE_SDL_IMAGE
+	depends on BR2_PACKAGE_SDL_MIXER
+	depends on BR2_PACKAGE_SDL_TTF
+	select BR2_PACKAGE_FRIBIDI
+	select BR2_PACKAGE_LIBPAPER
+	select BR2_PACKAGE_TUXPAINT_STAMPS
+	help
+	  TODO
+
+comment "tuxpaint needs pango, sdl w/ mixer, image, ttf"
+	depends on !BR2_PACKAGE_SDL || !BR2_PACKAGE_SDL_MIXER || \
+		   !BR2_PACKAGE_SDL_IMAGE || !BR2_PACKAGE_SDL_TTF || \
+		   !BR2_PACKAGE_PANGO
