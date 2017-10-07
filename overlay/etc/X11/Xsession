@@ -1,0 +1,10 @@
+#!/bin/sh
+
+/usr/local/bin/tuxpaint \
+	--fullscreen true \
+	--lang french
+
+#xterm &
+
+#twm
+#openbox
