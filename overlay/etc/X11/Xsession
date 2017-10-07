@@ -1,0 +1,7 @@
+#!/bin/sh
+
+/usr/local/bin/tuxpaint --fullscreen true &
+xterm &
+
+#twm
+openbox
