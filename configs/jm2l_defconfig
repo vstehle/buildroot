@@ -1,6 +1,5 @@
 BR2_x86_pentium4=y
 BR2_CCACHE=y
-BR2_CCACHE_DIR="/exported/buildbot/ccache-vincent"
 BR2_OPTIMIZE_2=y
 BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
 BR2_BINUTILS_VERSION_2_29_X=y
