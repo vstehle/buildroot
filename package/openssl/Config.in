@@ -43,7 +43,26 @@ config BR2_PACKAGE_LIBOPENSSL_ENGINES
 	help
 	  Install additional encryption engine libraries.
 
+choice
+	prompt "OpenSSL Version"
+	default BR2_LIBOPENSSL_VERSION_1_0
+	help
+	  Select the version of libopenssl you wish to use.
+
+config BR2_LIBOPENSSL_VERSION_1_0
+	bool "libopenssl 1.0.x"
+
+config BR2_LIBOPENSSL_VERSION_1_1
+	bool "libopenssl 1.1.x"
+
+endchoice
+
 endif
+
+config BR2_LIBOPENSSL_VERSION
+	string
+	default "1.0.2n"	if BR2_LIBOPENSSL_VERSION_1_0
+	default "1.1.0g"	if BR2_LIBOPENSSL_VERSION_1_1
 
 config BR2_PACKAGE_LIBRESSL
 	bool "libressl"
