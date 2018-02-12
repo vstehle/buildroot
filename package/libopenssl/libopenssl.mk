@@ -24,6 +24,10 @@ LIBOPENSSL_PATCH = \
 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
 endif
 
+ifeq ($(BR2_LIBOPENSSL_VERSION_1_1),y)
+LIBOPENSSL_MAKE = $(MAKE1)
+endif
+
 # relocation truncated to fit: R_68K_GOT16O
 ifeq ($(BR2_m68k_cf),y)
 LIBOPENSSL_CFLAGS += -mxgot
@@ -89,7 +93,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
 			no-rc5 \
 			enable-camellia \
 			enable-mdc2 \
-			enable-tlsext \
+			$(if $(BR2_LIBOPENSSL_VERSION_1_0),enable-tlsext) \
 			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
 			$(if $(BR2_STATIC_LIBS),no-dso) \
 	)
