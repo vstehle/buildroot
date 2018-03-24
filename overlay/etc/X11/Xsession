@@ -2,6 +2,7 @@
 
 /usr/local/bin/tuxpaint \
 	--fullscreen true \
+	--windowsize 1280x1024 \
 	--lang french
 
 #xterm &
