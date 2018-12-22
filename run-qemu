@@ -1,11 +1,14 @@
 #!/bin/bash
 set -eux
 
-sudo qemu-system-aarch64 \
+sudo taskset 0x30 \
+output/host/bin/qemu-system-aarch64 \
 	-append "console=ttyAMA0" \
-	-cpu cortex-a57 \
+	-cpu host \
+	-device virtio-net-device,netdev=net0 \
+	-enable-kvm \
 	-initrd output/images/rootfs.cpio \
 	-kernel output/images/Image \
 	-machine virt \
-	-net none \
+	-netdev user,id=net0 \
 	-nographic
