@@ -10,5 +10,5 @@ output/host/bin/qemu-system-aarch64 \
 	-initrd output/images/rootfs.cpio \
 	-kernel output/images/Image \
 	-machine virt \
-	-netdev user,id=net0 \
+	-netdev user,id=net0,hostfwd=::2345-:2345 \
 	-nographic
