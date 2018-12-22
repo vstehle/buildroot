@@ -16,7 +16,7 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
 #-------------------------------------------------------------
 # Target-qemu
 
-QEMU_DEPENDENCIES = host-pkgconf host-python libglib2 zlib pixman
+QEMU_DEPENDENCIES = host-pkgconf host-python3 libglib2 zlib pixman
 
 # Need the LIBS variable because librt and libm are
 # not automatically pulled. :-(
@@ -26,7 +26,7 @@ QEMU_OPTS =
 
 QEMU_VARS = \
 	LIBTOOL=$(HOST_DIR)/bin/libtool \
-	PYTHON=$(HOST_DIR)/bin/python2 \
+	PYTHON=$(HOST_DIR)/bin/python3 \
 	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
 
 # If we want to specify only a subset of targets, we must still enable all
@@ -157,7 +157,7 @@ $(eval $(generic-package))
 #-------------------------------------------------------------
 # Host-qemu
 
-HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-pixman
+HOST_QEMU_DEPENDENCIES = host-pkgconf host-python3 host-zlib host-libglib2 host-pixman
 
 #       BR ARCH         qemu
 #       -------         ----
@@ -274,7 +274,7 @@ define HOST_QEMU_CONFIGURE_CMDS
 		--interp-prefix=$(STAGING_DIR) \
 		--cc="$(HOSTCC)" \
 		--host-cc="$(HOSTCC)" \
-		--python=$(HOST_DIR)/bin/python2 \
+		--python=$(HOST_DIR)/bin/python3 \
 		--extra-cflags="$(HOST_CFLAGS)" \
 		--extra-ldflags="$(HOST_LDFLAGS)" \
 		$(HOST_QEMU_OPTS)
