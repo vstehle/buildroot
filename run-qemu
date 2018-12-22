@@ -1,0 +1,11 @@
+#!/bin/bash
+set -eux
+
+sudo qemu-system-aarch64 \
+	-append "console=ttyAMA0" \
+	-cpu cortex-a57 \
+	-initrd output/images/rootfs.cpio \
+	-kernel output/images/Image \
+	-machine virt \
+	-net none \
+	-nographic
