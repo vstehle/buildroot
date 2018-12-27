@@ -2,5 +2,10 @@
 set -eux
 
 bb_args=(echo "a b" c)
+bb_args2=()
 
-gdbserver :2345 busybox "${bb_args[@]}"
+for a in "${bb_args[@]}"; do
+	bb_args2+=("'$a'")
+done
+
+gdbserver :2345 busybox "${bb_args2[@]}"
