@@ -1,0 +1,6 @@
+#!/bin/bash
+set -eux
+
+bb_args=(echo "a b" c)
+
+gdbserver :2345 busybox "${bb_args[@]}"
