@@ -1,6 +1,7 @@
 #!/bin/bash
 set -eux
 
+taskset 0x30 \
 ./output/host/bin/qemu-system-aarch64 \
 	-append "console=ttyAMA0" \
 	-cpu host \
@@ -9,6 +10,6 @@ set -eux
 	-kernel output/images/Image \
 	-m 1g \
 	-machine virt \
-	-net none \
 	-nographic \
+	-net none \
 	-smp 2
