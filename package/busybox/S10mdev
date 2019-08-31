@@ -9,6 +9,7 @@ PIDFILE="/var/run/$DAEMON.pid"
 
 start() {
 	echo -n "Starting $DAEMON... "
+	touch /dev/mdev.log
 	start-stop-daemon -S -b -m -p $PIDFILE -x /sbin/mdev -- -df
 	[ $? -eq 0 ] && echo "OK" || echo "ERROR"
 
