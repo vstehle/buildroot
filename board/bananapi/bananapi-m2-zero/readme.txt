@@ -32,3 +32,18 @@ Copy the bootable "sdcard.img" onto an SD card with "dd":
 
 Insert the micro SDcard in your Bananapi M2 Zero and power it up. The console
 is on the Debug UART on the CON3 header, with serial settings 115200 8N1.
+
+Using Wifi
+==========
+
+  # modprobe brcmfmac
+  # iwconfig wlan0 essid ACCESSPOINTNAME
+  # wpa_passphrase ACCESSPOINTNAME > /etc/wpa.conf
+
+(enter the wifi password and press enter)
+
+  # wpa_supplicant -i wlan0 -c /etc/wpa.conf &
+  # udhcpc -i wlan0
+  # ping buildroot.org
+
+Enjoy!
