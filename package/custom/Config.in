@@ -1,0 +1,4 @@
+config BR2_PACKAGE_CUSTOM
+	bool "custom"
+	help
+	  TODO!
