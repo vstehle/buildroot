@@ -1,0 +1,29 @@
+From eaccd3c45c7a273d0fd248a66735193b816a3bc8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Tue, 21 Apr 2020 20:43:16 +0200
+Subject: [PATCH] Pour Xav
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+---
+ net/bridge/br.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/bridge/br.c b/net/bridge/br.c
+index b6fe30e37..9374de6d6 100644
+--- a/net/bridge/br.c
++++ b/net/bridge/br.c
+@@ -314,6 +314,8 @@ static int __init br_init(void)
+ 
+ 	BUILD_BUG_ON(sizeof(struct br_input_skb_cb) > sizeof_field(struct sk_buff, cb));
+ 
++	trace_printk("Hello, Xav!");
++
+ 	err = stp_proto_register(&br_stp_proto);
+ 	if (err < 0) {
+ 		pr_err("bridge: can't register sap for STP\n");
+-- 
+2.25.1
+
