@@ -988,13 +988,6 @@ config BR2_KERNEL_HEADERS_3_2
 	  Version 3.2.x of the Linux kernel headers are no longer
 	  maintained upstream and are now removed.
 
-config BR2_KERNEL_HEADERS_4_1
-	bool "kernel headers version 4.1.x are no longer supported"
-	select BR2_LEGACY
-	help
-	  Version 4.1.x of the Linux kernel headers are no longer
-	  maintained upstream and are now removed.
-
 config BR2_KERNEL_HEADERS_4_16
 	bool "kernel headers version 4.16.x are no longer supported"
 	select BR2_LEGACY
