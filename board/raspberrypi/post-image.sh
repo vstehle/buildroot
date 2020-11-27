@@ -40,6 +40,33 @@ __EOF__
 
 done
 
+cat << __EOF__ > "${BINARIES_DIR}/rpi-firmware/config.txt"
+start_file=start.elf
+fixup_file=fixup.dat
+
+# If the text shown on the screen disappears off the edge, comment this out
+disable_overscan=1
+
+# How much memory in MB to assign to the GPU on Pi models having
+# 256, 512 or 1024 MB total memory
+gpu_mem_1024=64
+
+# enable 64bits support
+arm_64bit=1
+
+# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
+dtoverlay=miniuart-bt
+
+# Custom
+#device_tree=bcm2837-rpi-3-b-plus.dtb
+core_freq=250
+enable_uart=1
+#kernel=Image
+kernel=u-boot.bin
+__EOF__
+
+sed -i 's/console=tty1//; s/ttyAMA0/ttyS1/' "${BINARIES_DIR}/rpi-firmware/cmdline.txt"
+
 # Pass an empty rootpath. genimage makes a full copy of the given rootpath to
 # ${GENIMAGE_TMP}/root so passing TARGET_DIR would be a waste of time and disk
 # space. We don't rely on genimage to build the rootfs image, just to insert a
