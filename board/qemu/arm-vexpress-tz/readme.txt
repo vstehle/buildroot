@@ -6,19 +6,18 @@ builds of the QEMU host ARM target emulator.
   make qemu_arm_vexpress_tz_defconfig
   make
 
-The BIOS used in the QEMU host is the ARM Trusted Firmware-A (TF-A). TF-A
-uses QEMU semihosting file access to access boot image files. The
-QEMU platform is quite specific for that in TF-A and one needs to
-run the emulation from the image directory for TF-A to boot the
-secure and non-secure worlds.
+The BIOS used in the QEMU host is the ARM Trusted Firmware-A (TF-A).
+In our configuration, U-Boot uses QEMU semihosting file access to load the
+kernel and rootfs image files.
+Run the emulation with:
 
-  cd output/images && ../host/bin/qemu-system-arm \
+  ./output/host/bin/qemu-system-arm \
 	-machine virt -machine secure=on -cpu cortex-a15 \
 	-smp 1 -s -m 1024 -d unimp \
 	-serial stdio \
 	-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic \
 	-semihosting-config enable,target=native \
-	-bios bl1.bin # qemu_arm_vexpress_tz_defconfig
+	-bios output/images/flash.bin # qemu_arm_vexpress_tz_defconfig
 
 The boot stage traces (if any) followed by the login prompt will appear
 in the terminal that started QEMU.
@@ -57,14 +56,14 @@ To get the OP-TEE OS traces, append a second -serial argument after
 -serial stdio in the QEMU command line. I.e, the following enables 2 serial
 consoles over telnet connections:
 
-  cd output/images && ../host/bin/qemu-system-arm \
+  ./output/host/bin/qemu-system-arm \
 	-machine virt -machine secure=on -cpu cortex-a15 \
 	-smp 1 -s -m 1024 -d unimp \
 	-serial telnet:127.0.0.1:1235,server \
 	-serial telnet:127.0.0.1:1236,server \
 	-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic \
 	-semihosting-config enable,target=native \
-	-bios bl1.bin
+	-bios output/images/flash.bin
 
 QEMU is now waiting for the telnet connection. From another shell, open a
 telnet connection on the port for the U-boot and Linux consoles:
@@ -87,13 +86,13 @@ host computer. We use option -S of qemu-system-arm to make QEMU
 waiting for the GDB continue instruction before booting the images.
 
 From a first shell:
-  cd output/images && ../host/bin/qemu-system-arm \
+  ./output/host/bin/qemu-system-arm \
 	-machine virt -machine secure=on -cpu cortex-a15 \
 	-smp 1 -s -m 1024 -d unimp \
 	-serial stdio \
 	-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic \
 	-semihosting-config enable,target=native \
-	-bios bl1.bin \
+	-bios output/images/flash.bin \
 	-S
 
 From a second shell:
@@ -109,7 +108,7 @@ From this GDB console, connect to the target, load the OP-TEE core symbols,
 set a breakpoint to its entry point (__text_start) and start emulation:
 
   (gdb) target remote 127.0.0.1:1234
-  (gdb) symbol-file ./output/build/optee-os-<reference>/out/arm/core/tee.elf
+  (gdb) symbol-file ./output/build/optee-os-<reference>/out/core/tee.elf
   (gdb) hbreak __text_start
   Hardware assisted breakpoint 1 at 0xe100000: file core/arch/arm/kernel/generic_entry_a32.S, line 246.
   (gdb) cont
