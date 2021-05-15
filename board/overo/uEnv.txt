@@ -1,0 +1,2 @@
+boardname=overo
+expansionname=summit
