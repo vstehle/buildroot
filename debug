@@ -1,0 +1,10 @@
+#!/bin/bash
+set -eux
+
+here="$(pwd)"
+cd output/build/linux-*
+
+"$here/output/host/usr/bin/aarch64-linux-gdb" \
+	-iex 'add-auto-load-safe-path /' \
+	-x "$here/scripts/linux.gdb" \
+	vmlinux
