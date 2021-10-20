@@ -1,0 +1,27 @@
+#!/bin/bash
+set -eux
+
+cp -v output/images/capsule.{itb,bin} .
+
+qemu-system-aarch64 \
+	-accel 'tcg,thread=multi' \
+	-bios output/images/flash.bin \
+	-cpu cortex-a72 \
+	-d 'unimp,guest_errors' \
+	-device 'virtio-rng-device,rng=rng0' \
+	-device virtio-balloon-device \
+	-device virtio-blk-device,drive=hd0 \
+	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
+	-m 2048 \
+	-machine 'virt,secure=on' \
+	-monitor null \
+	-net 'nic,model=virtio' \
+	-net 'user,tftp=output/images' \
+	-no-acpi \
+	-nodefaults \
+	-nographic \
+	-object 'rng-random,filename=/dev/urandom,id=rng0' \
+	-rtc 'base=utc,clock=host' \
+	-chardev file,id=char0,path=/dev/stdout \
+	-serial stdio -serial chardev:char0 \
+	-smp 2

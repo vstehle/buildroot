@@ -1,0 +1,36 @@
+From ecfa82c5d31922b60f0cc2cfd4c9c14b4abb8841 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+Date: Thu, 18 Nov 2021 18:35:35 +0100
+Subject: [PATCH] qemu: common: Fix build with update capsule
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The common emulation Makefile has a dependency on a non-existent
+qemu_capsule.o when building with support for capsule update enabled
+(CONFIG_EFI_RUNTIME_UPDATE_CAPSULE=y). Remove this false dependency to fix
+the build.
+
+This fixes the following build error:
+
+  make[1]: *** No rule to make target 'board/emulation/common/qemu_capsule.o', needed by 'board/emulation/common/built-in.o'.  Stop.
+
+Fixes: commit 47a25e81d35c ("Revert "efi_capsule: Move signature from DTB to .rodata"")
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Simon Glass <sjg@chromium.org>
+---
+ board/emulation/common/Makefile | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/board/emulation/common/Makefile b/board/emulation/common/Makefile
+index 7ed447a69dc..c5b452e7e34 100644
+--- a/board/emulation/common/Makefile
++++ b/board/emulation/common/Makefile
+@@ -2,4 +2,3 @@
+ 
+ obj-$(CONFIG_SYS_MTDPARTS_RUNTIME) += qemu_mtdparts.o
+ obj-$(CONFIG_SET_DFU_ALT_INFO) += qemu_dfu.o
+-obj-$(CONFIG_EFI_CAPSULE_FIRMWARE_MANAGEMENT) += qemu_capsule.o
+-- 
+2.33.0
+

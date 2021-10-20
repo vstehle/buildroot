@@ -13,3 +13,6 @@
 *.rej
 *~
 *.pyc
+/capsule.itb
+/capsule.bin
+/br.log
