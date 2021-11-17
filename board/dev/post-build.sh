@@ -14,11 +14,11 @@ fi
 
 cp -vf "${BINARIES_DIR}/shimaa64.efi" "${BINARIES_DIR}/efi-part/EFI/BOOT/bootaa64.efi"
 
-# Create flash.bin TF-A FIP image from bl1.bin and fip.bin
-dd if="${BINARIES_DIR}/bl1.bin" of="${BINARIES_DIR}/flash.bin" bs=4096
-dd if="${BINARIES_DIR}/fip.bin" of="${BINARIES_DIR}/flash.bin" seek=64 bs=4096 conv=notrunc
+# Create flash.bin
+dd if=/dev/zero of="${BINARIES_DIR}/flash.bin" bs=1M count=64
+dd if="${BINARIES_DIR}/u-boot.bin" of="${BINARIES_DIR}/flash.bin" bs=1M conv=notrunc
 
 # Generate capsule binaries
 cp -vf "${BOARD_DIR}/capsule.its" "${BINARIES_DIR}/capsule.its"
 (cd "${BINARIES_DIR}" && mkimage -f capsule.its capsule.itb)
-mkeficapsule --fit "${BINARIES_DIR}/capsule.itb" "${BINARIES_DIR}/capsule.bin"
+mkeficapsule --fit "${BINARIES_DIR}/capsule.itb" --index 1 "${BINARIES_DIR}/capsule.bin"

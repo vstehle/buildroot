@@ -16,7 +16,7 @@ DFU over TFTP can be initiated:
   => dhcp ${kernel_addr_r} capsule.itb
   => dfu tftp ${kernel_addr_r}
 
-This will start but writes to flash will fail because the flash is in secure world.
+This should succeed because the flash is in the normal world.
 
 Capsule
 -------
@@ -28,4 +28,4 @@ Capsule update:
   => dhcp ${kernel_addr_r} capsule.bin
   => efidebug capsule update -v ${kernel_addr_r}
 
-This will fail for now.
+This should succeed.

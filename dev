@@ -13,7 +13,7 @@ qemu-system-aarch64 \
 	-device virtio-blk-device,drive=hd0 \
 	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
 	-m 2048 \
-	-machine 'virt,secure=on' \
+	-machine virt \
 	-monitor null \
 	-net 'nic,model=virtio' \
 	-net 'user,tftp=output/images' \
