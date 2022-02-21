@@ -1,0 +1,5 @@
+config BR2_PACKAGE_A3700_UTILS_MARVELL
+	bool "a3700-utils-marvell"
+	depends on BR2_aarch64
+	help
+	  https://github.com/MarvellEmbeddedProcessors/a3700-utils-marvell/
