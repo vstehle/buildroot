@@ -9,3 +9,12 @@ config BR2_PACKAGE_CRYPTOPP
 comment "cryptopp needs a toolchain w/ C++, dynamic library, wchar"
 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
 		!BR2_USE_WCHAR
+
+if BR2_PACKAGE_CRYPTOPP
+
+config BR2_PACKAGE_CRYPTOPP_DO_NOT_BUILD
+	bool "cryptopp do not build"
+	help
+	  TODO
+
+endif
