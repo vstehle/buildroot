@@ -419,6 +419,7 @@ endmenu
 
 menu "Hardware handling"
 menu "Firmware"
+	source "package/a3700-utils-marvell/Config.in"
 	source "package/am33x-cm3/Config.in"
 	source "package/armbian-firmware/Config.in"
 	source "package/b43-firmware/Config.in"
