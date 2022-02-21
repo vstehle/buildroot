@@ -1,0 +1,4 @@
+config BR2_PACKAGE_HOST_A3700_UTILS_MARVELL
+	bool "host a3700-utils-marvell"
+	help
+	  https://github.com/MarvellEmbeddedProcessors/a3700-utils-marvell/
