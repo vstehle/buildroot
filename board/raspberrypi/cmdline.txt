@@ -1,0 +1,1 @@
+root=/dev/mmcblk1p2 rootwait console=ttyS1,115200

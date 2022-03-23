@@ -17,6 +17,9 @@ ROOTPATH_TMP="$(mktemp -d)"
 
 rm -rf "${GENIMAGE_TMP}"
 
+# Custom
+cp -vf "$BOARD_DIR/cmdline.txt" "$BINARIES_DIR/cmdline.txt"
+
 genimage \
 	--rootpath "${ROOTPATH_TMP}"   \
 	--tmppath "${GENIMAGE_TMP}"    \

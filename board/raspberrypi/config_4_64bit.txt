@@ -14,23 +14,29 @@ kernel=Image
 
 # Disable overscan assuming the display supports displaying the full resolution
 # If the text shown on the screen disappears off the edge, comment this out
-disable_overscan=1
+#disable_overscan=1
 
 # How much memory in MB to assign to the GPU on Pi models having
 # 256, 512 or 1024 MB total memory
-gpu_mem_256=100
-gpu_mem_512=100
-gpu_mem_1024=100
+#gpu_mem_256=100
+#gpu_mem_512=100
+#gpu_mem_1024=100
 
 # fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
-dtoverlay=miniuart-bt
+#dtoverlay=miniuart-bt
 
 # enable autoprobing of Bluetooth driver without need of hciattach/btattach
-dtoverlay=krnbt=on
+#dtoverlay=krnbt=on
 
-dtoverlay=vc4-kms-v3d-pi4
-dtoverlay=imx219
+#dtoverlay=vc4-kms-v3d-pi4
+#dtoverlay=imx219
 #dtoverlay=ov5647
 
 # enable 64bits support
 arm_64bit=1
+
+# Custom
+#core_freq=250
+#enable_uart=1
+#uart_2ndstage=1
+dvfs=3

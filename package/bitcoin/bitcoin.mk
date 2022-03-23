@@ -4,22 +4,22 @@
 #
 ################################################################################
 
-BITCOIN_VERSION = 0.21.2
+BITCOIN_VERSION = 22.0
 BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
 BITCOIN_AUTORECONF = YES
 BITCOIN_LICENSE = MIT
 BITCOIN_LICENSE_FILES = COPYING
 BITCOIN_CPE_ID_VENDOR = bitcoin
 BITCOIN_CPE_ID_PRODUCT = bitcoin_core
-BITCOIN_DEPENDENCIES = host-pkgconf boost libevent
+BITCOIN_DEPENDENCIES = host-pkgconf boost libevent berkeleydb
 BITCOIN_MAKE_ENV = BITCOIN_GENBUILD_NO_GIT=1
 BITCOIN_CONF_OPTS = \
 	--disable-bench \
-	--disable-wallet \
 	--disable-tests \
 	--with-boost-libdir=$(STAGING_DIR)/usr/lib/ \
 	--disable-hardening \
-	--without-gui
+	--without-gui \
+	--with-incompatible-bdb
 
 ifeq ($(BR2_PACKAGE_LIBMINIUPNPC),y)
 BITCOIN_DEPENDENCIES += libminiupnpc

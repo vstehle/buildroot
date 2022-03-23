@@ -1,0 +1,78 @@
+#!/bin/sh
+
+DAT=/var/run/bitcoin
+
+case "$1" in
+	start)
+		echo "Starting custom"
+
+		# Give hotplug a chance
+		sleep 3
+
+		# Date
+		while : ; do
+			echo
+			echo 'Enter date (YYYY-MM-DD HH:MM)'
+			echo
+			read -r d
+			date --set="$d" && break
+		done
+
+		# RAID
+		conf=/tmp/mdadm.conf
+		mdadm --examine --scan |tee "$conf"
+		md=$(cut -d \  -f 2 <"$conf")
+		mdadm --assemble --config="$conf" "$md"
+		cat /proc/mdstat
+
+		# FS
+		dev=$(echo "$md" |sed 's,md/,md,')
+		fsck "$dev"
+		mount "$dev" /mnt -o relatime,commit=3
+
+		# Bitcoin
+		mkdir -pv "$DAT"
+		echo '#regtest=1' >"$DAT/bitcoin.conf"
+		chmod 0600 "$DAT/bitcoin.conf"
+
+		d=$(mktemp -d)
+		tgz="$(ls -rt /mnt/bitcoin/backup_*.tar.gz |tail -1)"
+		gzip -dc "$tgz" |tar -C "$d" -x
+		find "$d" -name wallet.dat -exec cp -v {} "$DAT/wallet.dat" \;
+		rm -fr "$d"
+
+		bitcoind -datadir="$DAT" -daemon -prune=550 -noconnect
+
+		while : ; do
+			bitcoin-cli -datadir="$DAT" uptime >/dev/null 2>&1 && break
+			sleep 1
+		done
+
+		# Cron
+		mkdir -pv /var/spool/cron/crontabs
+		crond
+		echo '*/15 * * * * /root/save-bitcoin' |crontab -u root -
+		;;
+	stop)
+		echo "Stopping custom"
+
+		# Cron
+		killall crond
+
+		# Bitcoin
+		/root/save-bitcoin
+		killall bitcoind
+
+		while : ; do
+			bitcoin-cli -datadir="$DAT" uptime >/dev/null 2>&1 || break
+			sleep 1
+		done
+
+		# FS
+		umount /mnt
+		sync
+		;;
+	*)
+		echo "Usage: $0 {start|stop}"
+		exit 1
+esac

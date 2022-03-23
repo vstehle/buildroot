@@ -1,0 +1,43 @@
+#!/bin/sh
+set -eu
+
+DAT=/var/run/bitcoin
+tag="$(date +%Y-%m-%d_%H:%M:%S)"
+
+t=$(mktemp -d)
+trap 'rm -fr "$t"' EXIT
+
+# Backup dir
+d="$t/backup_$tag"
+mkdir -p "$d"
+
+# Backup wallet
+bitcoin-cli -datadir="$DAT" backupwallet "$d/wallet.dat"
+
+# Dump wallet
+bitcoin-cli -datadir="$DAT" dumpwallet "$d/dump.txt"
+
+# Dump addresses private keys
+a="$d/addresses.txt"
+echo "# address: private key" >"$a"
+
+for lab in $(bitcoin-cli -datadir="$DAT" listlabels |\
+		grep '^  "' |sed 's/,//g'); do
+
+	lac=$(echo "$lab" |sed 's/"//g')
+
+	for add in $(bitcoin-cli -datadir="$DAT" getaddressesbylabel "$lac" |\
+			grep '^  "' |sed 's/:.*//g'); do
+
+		adb=$(echo "$add" |sed 's/"//g')
+		p=$(bitcoin-cli -datadir="$DAT" dumpprivkey "$adb")
+		echo "$adb: $p" >>"$a"
+	done
+done
+
+# Archive
+tar -C "$t" -cvf "$d.tar" "backup_$tag"
+gzip "$d.tar"
+mv -v "$d.tar.gz" /mnt/bitcoin/
+
+sync
