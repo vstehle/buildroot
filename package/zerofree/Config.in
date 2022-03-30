@@ -2,7 +2,6 @@ config BR2_PACKAGE_ZEROFREE
 	bool "zerofree"
 	depends on BR2_USE_MMU # e2fsprogs
 	depends on !BR2_STATIC_LIBS
-	depends on !BR2_TOOLCHAIN_USES_MUSL
 	select BR2_PACKAGE_E2FSPROGS
 	help
 	  zerofree is a utility which scans the free blocks in an ext2
@@ -10,5 +9,5 @@ config BR2_PACKAGE_ZEROFREE
 
 	  https://frippery.org/uml/
 
-comment "zerofree needs MMU, dynamic library and does not build with musl"
-	depends on !BR2_USE_MMU || BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+comment "zerofree needs MMU and dynamic library"
+	depends on !BR2_USE_MMU || BR2_STATIC_LIBS
