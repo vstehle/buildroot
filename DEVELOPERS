@@ -2999,6 +2999,9 @@ N:	Vincent Prince <vincent.prince.fr@gmail.com>
 F:	package/nss-myhostname/
 F:	package/utp_com/
 
+N:	Vincent Stehlé <vincent.stehle@arm.com>
+F:	configs/qemu_aarch64_ebbr_defconfig
+
 N:	Vincent Stehlé <vincent.stehle@laposte.net>
 F:	board/bananapi/bananapi-m2-zero/
 F:	configs/bananapi_m2_zero_defconfig
