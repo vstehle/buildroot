@@ -1,0 +1,44 @@
+From c07904f4acece5522de338c8288131be6428d23d Mon Sep 17 00:00:00 2001
+From: Jacky Bai <ping.bai@nxp.com>
+Date: Fri, 27 Mar 2020 20:50:44 +0800
+Subject: [PATCH 1/4] plat: imx8mm: Update the cpu core power up timing
+
+Updating the CPU CORE power up timing to make sure
+the RDC reload is done before CPU start to run code
+in OCRAM space.
+
+Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+---
+ plat/imx/imx8m/imx8mm/gpc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/plat/imx/imx8m/imx8mm/gpc.c b/plat/imx/imx8m/imx8mm/gpc.c
+index ab59292e5..464f25622 100644
+--- a/plat/imx/imx8m/imx8mm/gpc.c
++++ b/plat/imx/imx8m/imx8mm/gpc.c
+@@ -49,16 +49,16 @@ void imx_gpc_init(void)
+ 
+ 	/*
+ 	 * Set the CORE & SCU power up timing:
+-	 * SW = 0x1, SW2ISO = 0x1;
++	 * SW = 0x1, SW2ISO = 0x8;
+ 	 * the CPU CORE and SCU power up timming counter
+ 	 * is drived  by 32K OSC, each domain's power up
+ 	 * latency is (SW + SW2ISO) / 32768
+ 	 */
+-	mmio_write_32(IMX_GPC_BASE + COREx_PGC_PCR(0) + 0x4, 0x81);
+-	mmio_write_32(IMX_GPC_BASE + COREx_PGC_PCR(1) + 0x4, 0x81);
+-	mmio_write_32(IMX_GPC_BASE + COREx_PGC_PCR(2) + 0x4, 0x81);
+-	mmio_write_32(IMX_GPC_BASE + COREx_PGC_PCR(3) + 0x4, 0x81);
+-	mmio_write_32(IMX_GPC_BASE + PLAT_PGC_PCR + 0x4, 0x81);
++	mmio_write_32(IMX_GPC_BASE + COREx_PGC_PCR(0) + 0x4, 0x401);
++	mmio_write_32(IMX_GPC_BASE + COREx_PGC_PCR(1) + 0x4, 0x401);
++	mmio_write_32(IMX_GPC_BASE + COREx_PGC_PCR(2) + 0x4, 0x401);
++	mmio_write_32(IMX_GPC_BASE + COREx_PGC_PCR(3) + 0x4, 0x401);
++	mmio_write_32(IMX_GPC_BASE + PLAT_PGC_PCR + 0x4, 0x401);
+ 	mmio_write_32(IMX_GPC_BASE + PGC_SCU_TIMING,
+ 		      (0x59 << 10) | 0x5B | (0x2 << 20));
+ 
+-- 
+2.39.0
+

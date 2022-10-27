@@ -1,0 +1,39 @@
+From bfc3de891a63258dc69deef0e95b54569047e17e Mon Sep 17 00:00:00 2001
+From: "Ying-Chun Liu (PaulLiu)" <paulliu@debian.org>
+Date: Thu, 5 May 2022 17:38:59 +0800
+Subject: [PATCH 4/4] port to latest mbedtls
+
+Signed-off-by: Ying-Chun Liu (PaulLiu) <paulliu@debian.org>
+---
+ drivers/auth/mbedtls/mbedtls_common.mk        | 2 +-
+ include/drivers/auth/mbedtls/mbedtls_config.h | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/auth/mbedtls/mbedtls_common.mk b/drivers/auth/mbedtls/mbedtls_common.mk
+index 3eb41617f..4b3252e60 100644
+--- a/drivers/auth/mbedtls/mbedtls_common.mk
++++ b/drivers/auth/mbedtls/mbedtls_common.mk
+@@ -45,7 +45,7 @@ LIBMBEDTLS_SRCS		:= $(addprefix ${MBEDTLS_DIR}/library/,	\
+ 					ecp_curves.c				\
+ 					ecp.c					\
+ 					rsa.c					\
+-					rsa_internal.c				\
++					rsa_alt_helpers.c				\
+ 					x509.c 					\
+ 					x509_crt.c 				\
+ 					constant_time.c 			\
+diff --git a/include/drivers/auth/mbedtls/mbedtls_config.h b/include/drivers/auth/mbedtls/mbedtls_config.h
+index 8ad6d7a42..cdca606fa 100644
+--- a/include/drivers/auth/mbedtls/mbedtls_config.h
++++ b/include/drivers/auth/mbedtls/mbedtls_config.h
+@@ -71,6 +71,7 @@
+ #endif
+ 
+ #define MBEDTLS_SHA256_C
++#define MBEDTLS_SHA224_C
+ 
+ /*
+  * If either Trusted Boot or Measured Boot require a stronger algorithm than
+-- 
+2.39.0
+

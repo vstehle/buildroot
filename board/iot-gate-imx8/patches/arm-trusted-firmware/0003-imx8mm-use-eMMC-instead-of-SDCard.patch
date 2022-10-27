@@ -1,0 +1,47 @@
+From 2c3b5338cb3cbb31abd5a1ef8fd759c5c8d8c951 Mon Sep 17 00:00:00 2001
+From: "Ying-Chun Liu (PaulLiu)" <paulliu@debian.org>
+Date: Wed, 24 Nov 2021 03:38:21 +0800
+Subject: [PATCH 3/4] imx8mm: use eMMC instead of SDCard
+
+Signed-off-by: Ying-Chun Liu (PaulLiu) <paulliu@debian.org>
+---
+ plat/imx/imx8m/imx8mm/imx8mm_bl2_el3_setup.c | 8 ++++----
+ plat/imx/imx8m/imx8mm/include/platform_def.h | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/plat/imx/imx8m/imx8mm/imx8mm_bl2_el3_setup.c b/plat/imx/imx8m/imx8mm/imx8mm_bl2_el3_setup.c
+index c39dd93e7..4650bf7b2 100644
+--- a/plat/imx/imx8m/imx8mm/imx8mm_bl2_el3_setup.c
++++ b/plat/imx/imx8m/imx8mm/imx8mm_bl2_el3_setup.c
+@@ -55,11 +55,11 @@ static void imx8mm_usdhc_setup(void)
+ 
+ 	   We pick 50 Mhz here for High Speed access.
+ 	*/
+-	params.clk_rate = 50000000;
+-	params.bus_width = MMC_BUS_WIDTH_1;
++	params.clk_rate = 25000000;
++	params.bus_width = MMC_BUS_WIDTH_8;
+ 	params.flags = 0;
+-	info.mmc_dev_type = MMC_IS_SD;
+-	info.ocr_voltage = OCR_3_3_3_4 | OCR_3_2_3_3;
++	info.mmc_dev_type = MMC_IS_EMMC;
++	//info.ocr_voltage = OCR_3_3_3_4 | OCR_3_2_3_3;
+ 	imx_usdhc_init(&params, &info);
+ }
+ 
+diff --git a/plat/imx/imx8m/imx8mm/include/platform_def.h b/plat/imx/imx8m/imx8mm/include/platform_def.h
+index 300ef9e62..e49012c02 100644
+--- a/plat/imx/imx8m/imx8mm/include/platform_def.h
++++ b/plat/imx/imx8m/imx8mm/include/platform_def.h
+@@ -49,7 +49,7 @@
+ /* Define FIP image location on eMMC */
+ #define IMX_FIP_MMC_BASE		U(0x100000)
+ 
+-#define PLAT_IMX8MM_BOOT_MMC_BASE	U(0x30B50000) /* SD */
++#define PLAT_IMX8MM_BOOT_MMC_BASE	U(0x30B60000) /* eMMC */
+ #else
+ #define BL31_BASE			U(0x920000)
+ #define BL31_LIMIT			U(0x940000)
+-- 
+2.39.0
+

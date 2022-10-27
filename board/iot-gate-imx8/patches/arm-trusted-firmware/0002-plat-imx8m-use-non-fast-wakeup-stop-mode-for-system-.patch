@@ -1,0 +1,30 @@
+From b223153083934de458850a11e3e05539197b600e Mon Sep 17 00:00:00 2001
+From: Jacky Bai <ping.bai@nxp.com>
+Date: Fri, 10 Jan 2020 09:24:46 +0800
+Subject: [PATCH 2/4] plat: imx8m: use non-fast wakeup stop mode for system
+ suspend
+
+Use non-fast wakeup stop mode for system suspend support, so
+the SOC can enter DSM mode by default.
+
+Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+---
+ plat/imx/imx8m/gpc_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plat/imx/imx8m/gpc_common.c b/plat/imx/imx8m/gpc_common.c
+index 1e55f058d..7af444131 100644
+--- a/plat/imx/imx8m/gpc_common.c
++++ b/plat/imx/imx8m/gpc_common.c
+@@ -228,7 +228,7 @@ void imx_set_sys_lpm(unsigned int last_core, bool retention)
+ 
+ 	if (retention)
+ 		val |= (SLPCR_EN_DSM | SLPCR_VSTBY | SLPCR_SBYOS |
+-			SLPCR_BYPASS_PMIC_READY | SLPCR_A53_FASTWUP_STOP_MODE);
++			SLPCR_BYPASS_PMIC_READY);
+ 
+ 	mmio_write_32(IMX_GPC_BASE + SLPCR, val);
+ 
+-- 
+2.39.0
+
