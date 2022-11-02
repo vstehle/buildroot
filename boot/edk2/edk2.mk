@@ -142,6 +142,12 @@ EDK2_PACKAGE_NAME = OvmfPkg/RiscVVirt
 EDK2_PLATFORM_NAME = RiscVVirtQemu
 EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)
 
+else ifeq ($(BR2_TARGET_EDK2_PLATFORM_STMM),y)
+EDK2_ARCH = AARCH64
+EDK2_PACKAGE_NAME = Platform/StandaloneMm/PlatformStandaloneMmPkg
+EDK2_PLATFORM_NAME = PlatformStandaloneMmRpmb
+EDK2_BUILD_DIR = MmStandaloneRpmb
+
 endif
 
 EDK2_BASETOOLS_OPTS = \

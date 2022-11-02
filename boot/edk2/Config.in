@@ -116,6 +116,12 @@ config BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA
 comment "QEMU SBSA depends on ATF not using EDK2 as BL33"
 	depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
 
+config BR2_TARGET_EDK2_PLATFORM_STMM
+	bool "StMM"
+	depends on BR2_aarch64
+	help
+	  TODO!
+
 endchoice
 
 config BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL
