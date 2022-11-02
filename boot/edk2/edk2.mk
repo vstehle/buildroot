@@ -64,7 +64,11 @@ EDK2_PLATFORM_NAME = OvmfPkgX64
 EDK2_BUILD_DIR = OvmfX64
 
 else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU),y)
+ifeq ($(BR2_arm),y)
+EDK2_ARCH = ARM
+else ifeq ($(BR2_aarch64),y)
 EDK2_ARCH = AARCH64
+endif
 EDK2_PACKAGE_NAME = ArmVirtPkg
 EDK2_PLATFORM_NAME = ArmVirtQemu
 EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)
@@ -128,6 +132,16 @@ define EDK2_PRE_BUILD_QEMU_SBSA
 	mkdir -p $(EDK2_BUILD_PACKAGES)/Platform/Qemu/Sbsa
 	ln -srf $(BINARIES_DIR)/{bl1.bin,fip.bin} $(EDK2_BUILD_PACKAGES)/Platform/Qemu/Sbsa/
 endef
+
+else ifeq ($(BR2_TARGET_EDK2_PLATFORM_STMM),y)
+ifeq ($(BR2_arm),y)
+EDK2_ARCH = ARM
+else ifeq ($(BR2_aarch64),y)
+EDK2_ARCH = AARCH64
+endif
+EDK2_PACKAGE_NAME = Platform/StandaloneMm/PlatformStandaloneMmPkg
+EDK2_PLATFORM_NAME = PlatformStandaloneMmRpmb
+EDK2_BUILD_DIR = MmStandaloneRpmb
 
 endif
 
