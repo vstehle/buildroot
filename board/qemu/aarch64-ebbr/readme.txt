@@ -26,7 +26,7 @@ Running under Qemu
 Run the emulation with:
 
   qemu-system-aarch64 \
-      -M virt,secure=on \
+      -M virt,secure=on,virtualization=on \
       -bios output/images/flash.bin \
       -cpu cortex-a53 \
       -device virtio-blk-device,drive=hd0 \
@@ -63,7 +63,7 @@ image first with:
 Then run the OS installer iso image on emulation with:
 
   qemu-system-aarch64 \
-      -M virt,secure=on \
+      -M virt,secure=on,virtualization=on \
       -bios output/images/flash.bin \
       -cpu cortex-a53 \
       -device virtio-blk-device,drive=hd1 \
@@ -101,3 +101,5 @@ Firmware update is currently not supported.
 [2]: https://developer.arm.com/Architectures/Arm%20SystemReady%20IR
 [3]: https://github.com/ARM-software/arm-systemready/tree/main/IR/prebuilt_images
 [4]: https://developer.arm.com/documentation/DUI1101/1-1/?lang=en
+
+TBD https://git.linaro.org/people/ilias.apalodimas/efi_optee_variables.git/
