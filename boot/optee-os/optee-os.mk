@@ -75,6 +75,13 @@ OPTEE_OS_MAKE_OPTS += \
 endif
 endif
 
+ifeq ($(BR2_TARGET_EDK2_PLATFORM_STMM),y)
+OPTEE_OS_DEPENDENCIES += edk2
+
+OPTEE_OS_MAKE_OPTS += \
+	CFG_STMM_PATH=$(BINARIES_DIR)/BL32_AP_MM.fd
+endif
+
 # Get mandatory PLATFORM and optional PLATFORM_FLAVOR and additional
 # variables
 OPTEE_OS_MAKE_OPTS += PLATFORM=$(call qstrip,$(BR2_TARGET_OPTEE_OS_PLATFORM))
