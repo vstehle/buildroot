@@ -1,0 +1,15 @@
+#!/bin/bash
+set -eux
+
+qemu-system-arm \
+	-machine virt,secure=on \
+	-cpu cortex-a15 \
+	-bios output/images/flash.bin \
+	-device virtio-blk-device,drive=hd0 \
+	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
+	-m 2048 \
+	-no-acpi \
+	-nographic \
+	-net none \
+	-d unimp \
+	-s

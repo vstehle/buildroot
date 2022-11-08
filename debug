@@ -1,0 +1,7 @@
+#!/bin/bash
+set -eux
+
+./output/host/bin/aarch64-linux-gdb \
+	-iex 'add-auto-load-safe-path /' \
+	-x output/staging/usr/share/buildroot/gdbinit \
+	-x debug.gdb
