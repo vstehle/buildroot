@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-MBEDTLS_VERSION = 2.28.2
-MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+MBEDTLS_VERSION = 068a13d90
+MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,$(MBEDTLS_VERSION))
 MBEDTLS_CONF_OPTS = \
 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
@@ -19,13 +19,6 @@ MBEDTLS_CPE_ID_PRODUCT = mbed_tls
 
 # This is mandatory for hiawatha
 ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-define MBEDTLS_ENABLE_THREADING
-	$(SED) "s://#define MBEDTLS_THREADING_C:#define MBEDTLS_THREADING_C:" \
-		$(@D)/include/mbedtls/config.h
-	$(SED) "s://#define MBEDTLS_THREADING_PTHREAD:#define MBEDTLS_THREADING_PTHREAD:" \
-		$(@D)/include/mbedtls/config.h
-endef
-MBEDTLS_PRE_CONFIGURE_HOOKS += MBEDTLS_ENABLE_THREADING
 ifeq ($(BR2_STATIC_LIBS),y)
 MBEDTLS_CONF_OPTS += -DLINK_WITH_PTHREAD=ON
 endif
