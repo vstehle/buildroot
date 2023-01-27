@@ -28,5 +28,7 @@ else
 NETTLE_CONF_OPTS += --disable-arm-neon
 endif
 
+HOST_NETTLE_DEPENDENCIES = host-gmp
+
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))
