@@ -1,0 +1,6 @@
+config BR2_PACKAGE_HOST_EFITOOLS
+	bool "host efitools"
+	help
+	  EFI tools.
+
+	  https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git/
