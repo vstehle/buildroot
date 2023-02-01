@@ -1,0 +1,38 @@
+#!/bin/bash
+set -eux
+
+# /!\ Run while in U-Boot
+
+DEBUG_GDB=.debug-tf-a.gdb
+bl1=$(find output/build/arm-trusted-firmware-* -type f -name bl1.elf)
+bl2=$(find output/build/arm-trusted-firmware-* -type f -name bl2.elf)
+bl31=$(find output/build/arm-trusted-firmware-* -type f -name bl31.elf)
+
+cat <<END >"$DEBUG_GDB"
+target remote :1234
+printf "in EL%d\\n", (\$cpsr >> 2) & 3
+symbol-file $bl1
+add-symbol-file $bl2
+add-symbol-file $bl31
+break bl2_entrypoint
+break bl31_entrypoint
+break *0x60000000
+where
+cont
+
+where
+cont
+
+where
+#break psci_cpu_on
+#break psci_smc_handler
+#break std_svc_smc_handler
+#break smc_handler
+#cont
+END
+
+nl "$DEBUG_GDB"
+
+./output/host/bin/aarch64-linux-gdb \
+        -x output/staging/usr/share/buildroot/gdbinit \
+        -x "$DEBUG_GDB"

@@ -1,0 +1,52 @@
+#!/bin/bash
+set -eux
+
+# /!\ Run while in U-Boot
+
+DEBUG_GDB=.debug-linux-efi-stub.gdb
+uboot=$(find output/build/uboot-* -type f -name u-boot)
+linux=$(ls output/build/linux-*/vmlinux)
+
+text=$(./output/host/bin/aarch64-linux-nm -n "$linux" \
+	|grep __efistub__text |sed 's/ .*//')
+
+cat <<END >"$DEBUG_GDB"
+target remote :1234
+printf "in EL%d\\n", (\$cpsr >> 2) & 3
+
+symbol-file $uboot
+set \$gd = (gd_t *)\$x18
+printf "U-Boot gd->relocaddr: %x\\n", \$gd->relocaddr
+symbol-file
+add-symbol-file $uboot \$gd->relocaddr
+break efi_load_pe
+printf "Boot to continue...\n"
+cont
+
+where
+cont
+
+where
+finish
+printf "Linux image_base: %x\n", info->image_base
+set \$off = info->image_base - 0x$text
+printf "Linux off: %d\n", \$off
+add-symbol-file $linux -o \$off
+break efi_start_image
+cont
+
+where
+set \$image_obj = (struct efi_loaded_image_obj *)image_handle
+printf "Linux image_obj->entry: %x\n", \$image_obj->entry
+break *\$image_obj->entry
+cont
+
+where
+#cont
+END
+
+nl "$DEBUG_GDB"
+
+./output/host/bin/aarch64-linux-gdb \
+        -x output/staging/usr/share/buildroot/gdbinit \
+        -x "$DEBUG_GDB"

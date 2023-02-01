@@ -1,0 +1,29 @@
+#!/bin/bash
+set -eux
+
+DEBUG_GDB=.debug-u-boot.gdb
+uboot=$(find output/build/uboot-* -type f -name u-boot)
+
+cat <<END >"$DEBUG_GDB"
+target remote :1234
+printf "in EL%d\\n", (\$cpsr >> 2) & 3
+break *0x60000000
+cont
+
+add-symbol-file $uboot -o 0x60000000
+where
+break relocate_done
+cont
+
+where
+set \$gd = (gd_t *)\$x18
+printf "U-Boot gd->relocaddr: %x\\n", \$gd->relocaddr
+add-symbol-file $uboot \$gd->relocaddr
+#cont
+END
+
+nl "$DEBUG_GDB"
+
+./output/host/bin/aarch64-linux-gdb \
+        -x output/staging/usr/share/buildroot/gdbinit \
+        -x "$DEBUG_GDB"

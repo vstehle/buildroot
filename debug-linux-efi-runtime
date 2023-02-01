@@ -1,0 +1,31 @@
+#!/bin/bash
+set -eux
+
+# /!\ Run while in U-Boot
+
+DEBUG_GDB=.debug-linux-efi-runtime.gdb
+uboot=$(find output/build/uboot-* -type f -name u-boot)
+linux=$(ls output/build/linux-*/vmlinux)
+
+cat <<END >"$DEBUG_GDB"
+target remote :1234
+printf "in EL%d\\n", (\$cpsr >> 2) & 3
+symbol-file $uboot
+set \$gd = (gd_t *)\$x18
+printf "gd->relocaddr: %x\\n", \$gd->relocaddr
+symbol-file
+add-symbol-file $uboot \$gd->relocaddr
+add-symbol-file $linux
+break efi_call_rts
+printf "Boot to Linux to continue...\n"
+cont
+
+where
+#cont
+END
+
+nl "$DEBUG_GDB"
+
+./output/host/bin/aarch64-linux-gdb \
+        -x output/staging/usr/share/buildroot/gdbinit \
+        -x "$DEBUG_GDB"

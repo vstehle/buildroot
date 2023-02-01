@@ -1,0 +1,26 @@
+#!/bin/bash
+set -eux
+
+DEBUG_GDB=.debug-linux.gdb
+linux=$(ls output/build/linux-*/vmlinux)
+
+cat <<END >"$DEBUG_GDB"
+target remote :1234
+printf "in EL%d\\n", (\$cpsr >> 2) & 3
+symbol-file $linux
+break start_kernel
+printf "Boot to continue...\n"
+cont
+
+where
+#cont
+END
+
+nl "$DEBUG_GDB"
+
+./output/host/bin/aarch64-linux-gdb \
+        -x output/staging/usr/share/buildroot/gdbinit \
+        -x "$DEBUG_GDB"
+
+# FIXME!
+# -iex 'add-auto-load-safe-path /' \

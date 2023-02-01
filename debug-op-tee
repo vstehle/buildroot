@@ -1,0 +1,24 @@
+#!/bin/bash
+set -eux
+
+# /!\ Run while in U-Boot
+
+DEBUG_GDB=.debug-op-tee.gdb
+optee=$(ls output/build/optee-os-*/out/core/tee.elf)
+
+cat <<END >"$DEBUG_GDB"
+target remote :1234
+printf "in EL%d\\n", (\$cpsr >> 2) & 3
+symbol-file $optee
+printf "Boot to continue...\n"
+cont
+
+where
+#cont
+END
+
+nl "$DEBUG_GDB"
+
+./output/host/bin/aarch64-linux-gdb \
+        -x output/staging/usr/share/buildroot/gdbinit \
+        -x "$DEBUG_GDB"

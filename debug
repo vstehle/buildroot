@@ -1,0 +1,77 @@
+#!/bin/bash
+set -eux
+
+# /!\ Run while in U-Boot
+
+DEBUG_GDB=.debug.gdb
+bl1=$(find output/build/arm-trusted-firmware-* -type f -name bl1.elf)
+bl2=$(find output/build/arm-trusted-firmware-* -type f -name bl2.elf)
+bl31=$(find output/build/arm-trusted-firmware-* -type f -name bl31.elf)
+uboot=$(find output/build/uboot-* -type f -name u-boot)
+grub=$(find output/build/grub2-* -type f -name kernel.exec)
+linux=$(ls output/build/linux-*/vmlinux)
+
+text=$(./output/host/bin/aarch64-linux-nm -n "$linux" \
+	|grep __efistub__text |sed 's/ .*//')
+
+cat <<END >"$DEBUG_GDB"
+target remote :1234
+printf "in EL%d\\n", (\$cpsr >> 2) & 3
+symbol-file $uboot
+set \$gd = (gd_t *)\$x18
+printf "U-Boot gd->relocaddr: %x\\n", \$gd->relocaddr
+symbol-file
+add-symbol-file $uboot \$gd->relocaddr
+add-symbol-file $bl1
+add-symbol-file $bl2
+add-symbol-file $bl31
+add-symbol-file $linux
+break efi_call_rts
+#break psci_cpu_on
+#break psci_smc_handler
+break std_svc_smc_handler
+#break smc_handler
+break start_kernel
+break efi_load_pe
+printf "Boot to continue...\n"
+cont
+
+where
+finish
+printf "GRUB image_base: %x\n", info->image_base
+break efi_start_image
+cont
+
+where
+set \$image_obj = (struct efi_loaded_image_obj *)image_handle
+printf "GRUB image_obj->entry: %x\n", \$image_obj->entry
+add-symbol-file $grub \$image_obj->entry
+break *\$image_obj->entry
+cont
+
+where
+finish
+printf "Linux image_base: %x\n", info->image_base
+set \$off = info->image_base - 0x$text
+printf "Linux off: %d\n", \$off
+add-symbol-file $linux -o \$off
+cont
+
+where
+set \$image_obj = (struct efi_loaded_image_obj *)image_handle
+printf "Linux image_obj->entry: %x\n", \$image_obj->entry
+break *\$image_obj->entry
+cont
+
+where
+#cont
+END
+
+nl "$DEBUG_GDB"
+
+./output/host/bin/aarch64-linux-gdb \
+        -x output/staging/usr/share/buildroot/gdbinit \
+        -x "$DEBUG_GDB"
+
+# FIXME!
+# -iex 'add-auto-load-safe-path /' \
