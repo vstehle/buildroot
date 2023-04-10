@@ -1,4 +1,5 @@
 #!/bin/sh
+set -x
 
 # This scripts makes a minimal bootable SD card image for the Chromebook.
 # The resulting file is called bootsd.img. It should be written directly
@@ -53,17 +54,18 @@ rootfsstart=$((kernelstart+kernelblocks))
 
 # This command initializes both GPT and MBR
 run $parted -s $bootsd mklabel gpt
+run $cgpt create $bootsd
 
 # The kernel partition must be marked as bootable, that's why -S -T -P
 run $cgpt add -i 1 -b $kernelstart -s $kernelblocks \
-	-t kernel -l kernel \
-	-S 1 -T 1 -P 10 $bootsd
+	-t kernel -l Kernel \
+	-S 1 -T 5 -P 10 $bootsd
 
 # It does not really matter where the rootfs partition is located as long
 # as the kernel can find it.
 # However, if anything is changed here, kernel.args must be updated as well.
 run $cgpt add -i 2 -b $rootfsstart -s $rootfsblocks \
-	-t data -l rootfs $bootsd
+	-t data -l Root $bootsd
 
 run dd bs=$block if=$kernel of=$bootsd seek=$kernelstart
 run dd bs=$block if=$rootfs of=$bootsd seek=$rootfsstart
