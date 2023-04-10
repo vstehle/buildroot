@@ -1,0 +1,64 @@
+From fbcc7b9f8535d03787eb24c30f19322f94b8e22e Mon Sep 17 00:00:00 2001
+From: Alper Nebi Yasak <alpernebiyasak@gmail.com>
+Date: Mon, 31 Jan 2022 20:52:23 +0300
+Subject: [PATCH 1/3] Kconfig: Add options related to chainloading from
+ Depthcharge
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The Chromium OS bootloader ("Depthcharge") can chainload U-Boot in a few
+ways. Although the details vary from board to board, in general these
+are: as a "kernel" partition image, as a "Legacy Boot" payload, and as
+an "Alternative Firmware" payload. Future patches will automate building
+these images using binman, but U-Boot must also satisfy some constraints
+to work in these configurations.
+
+On ARM64 boards chainloading from a partition, Depthcharge checks
+for the Linux kernel image header magic and copies the binary-to-run to
+a dynamically chosen address, so we must build U-Boot as position
+independent and with the Linux header.
+
+Add configuration options we can use to enable/disable building these
+images and enforce these constraints.
+
+Signed-off-by: Alper Nebi Yasak <alpernebiyasak@gmail.com>
+[Vincent: keep only chainloading as kernel partition image.]
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+---
+ Kconfig | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/Kconfig b/Kconfig
+index 70efb41cc66..3c04b57540e 100644
+--- a/Kconfig
++++ b/Kconfig
+@@ -471,6 +471,25 @@ config BOARD_SIZE_LIMIT
+ 	  include SPL nor TPL, on platforms that use that functionality, they
+ 	  have a separate option to restict size.
+ 
++config HAS_DEPTHCHARGE
++	bool
++	help
++	  Enables visibility of options related to chainloading U-Boot from
++	  the Chrome OS bootloader ("Depthcharge").
++
++if HAS_DEPTHCHARGE
++
++config DEPTHCHARGE_PARTITION_IMAGE
++	bool "Run from a kernel partition image for Depthcharge"
++	select POSITION_INDEPENDENT if (ARM && CPU_V7A) || ARM64
++	select LINUX_KERNEL_IMAGE_HEADER if ARM64
++	help
++	  Enable this option if U-Boot will run from a Chromium OS kernel
++	  partition image intended to make the Chromium OS bootloader
++	  ("Depthcharge") chainload into U-Boot.
++
++endif # HAS_DEPTHCHARGE
++
+ config SYS_CUSTOM_LDSCRIPT
+ 	bool "Use a custom location for the U-Boot linker script"
+ 	help
+-- 
+2.35.1
+
