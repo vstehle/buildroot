@@ -1,0 +1,1 @@
+root=PARTUUID=%U/PARTNROFF=1 rootfstype=ext4 rootwait rw console=tty1 console=ttyS2,115200n8 earlycon debug
