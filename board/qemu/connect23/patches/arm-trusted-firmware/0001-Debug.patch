@@ -1,0 +1,31 @@
+From 3bea8e179a8a3f13ffd5801298aeb3e2dcc18211 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+Date: Thu, 16 Mar 2023 10:35:35 +0100
+Subject: [PATCH] Debug
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+---
+ plat/qemu/qemu/include/platform_def.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plat/qemu/qemu/include/platform_def.h b/plat/qemu/qemu/include/platform_def.h
+index c9ed6409f..5893c9c99 100644
+--- a/plat/qemu/qemu/include/platform_def.h
++++ b/plat/qemu/qemu/include/platform_def.h
+@@ -199,8 +199,8 @@
+ #define PLAT_QEMU_BOOT_UART_BASE	UART0_BASE
+ #define PLAT_QEMU_BOOT_UART_CLK_IN_HZ	UART0_CLK_IN_HZ
+ 
+-#define PLAT_QEMU_CRASH_UART_BASE	UART1_BASE
+-#define PLAT_QEMU_CRASH_UART_CLK_IN_HZ	UART1_CLK_IN_HZ
++#define PLAT_QEMU_CRASH_UART_BASE	UART0_BASE
++#define PLAT_QEMU_CRASH_UART_CLK_IN_HZ	UART0_CLK_IN_HZ
+ 
+ #define PLAT_QEMU_CONSOLE_BAUDRATE	115200
+ 
+-- 
+2.39.2
+

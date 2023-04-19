@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="firmware">
+  <id>connect23</id>
+  <name>Firmware for Linaro Connect 2023</name>
+  <summary>This is the firmware for the Linaro Connect 2023 demo.</summary>
+  <description>
+    <p>This cab file is for the Linaro Connect 2023 demo.</p>
+  </description>
+  <provides>
+    <firmware type="flashed">058b7d83-50d5-4c47-a195-60d86ad341c4</firmware>
+  </provides>
+  <releases>
+    <release urgency="high" version="42" date="1970-01-01" install_duration="120">
+      <checksum filename="capsule.bin" target="content"/>
+      <description>
+        <p>This release with version 42 is for the Linaro Connect 2023 demo.</p>
+      </description>
+    </release>
+  </releases>
+  <custom>
+    <value key="LVFS::UpdateProtocol">org.uefi.capsule</value>
+  </custom>
+</component>

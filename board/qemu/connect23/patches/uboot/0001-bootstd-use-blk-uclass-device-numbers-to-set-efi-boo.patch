@@ -1,0 +1,52 @@
+From b0d5d2806b4f98cdd3f0e86f1964034ebf844503 Mon Sep 17 00:00:00 2001
+From: Mathew McBride <matt@traverse.com.au>
+Date: Wed, 5 Apr 2023 02:44:48 +0000
+Subject: [PATCH 1/3] bootstd: use blk uclass device numbers to set efi bootdev
+
+When loading a file from a block device, efiload_read_file
+was using the seq_num of the device (e.g "35" of virtio_blk#35)
+instead of the block device id (e.g what you get from running
+the corresponding device scan command, like "virtio 0")
+
+This cause EFI booting from these devices to fail as an
+invalid device number is passed to blk_get_device_part_str:
+
+Scanning bootdev 'virtio-blk#35.bootdev':
+distro_efi_read_bootflow_file start (efi,fname=<NULL>)
+distro_efi_read_bootflow_file start (efi,fname=<NULL>)
+setting bootdev virtio, 35, efi/boot/bootaa64.efi, 00000000beef9a40, 170800
+efi_dp_from_name calling blk_get_device_part_str
+dev=virtio devnr=35 path=efi/boot/bootaa64.efi
+blk_get_device_part_str (virtio,35)
+blk_get_device_by_str (virtio, 35)
+** Bad device specification virtio 35 **
+Using default device tree: dtb/qemu-arm.dtb
+No device tree available
+0  efi          ready   virtio       1  virtio-blk#35.bootdev.par efi/boot/bootaa64.efi
+** Booting bootflow 'virtio-blk#35.bootdev.part_1' with efi
+blk_get_device_part_str (virtio,0:1)
+blk_get_device_by_str (virtio, 0)
+No UEFI binary known at beef9a40 (image buf=00000000beef9a40,addr=0000000000000000)
+Boot failed (err=-22)
+
+Signed-off-by: Mathew McBride <matt@traverse.com.au>
+---
+ boot/bootmeth_efi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/boot/bootmeth_efi.c b/boot/bootmeth_efi.c
+index 67c972e3fe4..7b5d2ab3694 100644
+--- a/boot/bootmeth_efi.c
++++ b/boot/bootmeth_efi.c
+@@ -117,7 +117,7 @@ static int efiload_read_file(struct blk_desc *desc, struct bootflow *bflow)
+ 	 * this can go away.
+ 	 */
+ 	media_dev = dev_get_parent(bflow->dev);
+-	snprintf(devnum_str, sizeof(devnum_str), "%x", dev_seq(media_dev));
++	snprintf(devnum_str, sizeof(devnum_str), "%d", desc->devnum);
+ 
+ 	strlcpy(dirname, bflow->fname, sizeof(dirname));
+ 	last_slash = strrchr(dirname, '/');
+-- 
+2.39.2
+

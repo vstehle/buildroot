@@ -1,0 +1,137 @@
+From f2945583883025a370f8c0e18b3b1823b1c87f81 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+Date: Thu, 16 Mar 2023 10:52:56 +0100
+Subject: [PATCH 3/3] Persist RPMB emulation to file with semihosting
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+---
+ configs/qemu_arm64_defconfig |  1 +
+ drivers/tee/optee/rpmb_emu.c | 65 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 66 insertions(+)
+
+diff --git a/configs/qemu_arm64_defconfig b/configs/qemu_arm64_defconfig
+index d2c3372004b..41bb09f20a8 100644
+--- a/configs/qemu_arm64_defconfig
++++ b/configs/qemu_arm64_defconfig
+@@ -73,3 +73,4 @@ CONFIG_USB=y
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_PCI=y
+ CONFIG_TPM=y
++CONFIG_SEMIHOSTING=y
+diff --git a/drivers/tee/optee/rpmb_emu.c b/drivers/tee/optee/rpmb_emu.c
+index 629f36ee6b2..dceaa60f338 100644
+--- a/drivers/tee/optee/rpmb_emu.c
++++ b/drivers/tee/optee/rpmb_emu.c
+@@ -10,6 +10,7 @@
+ #include <tee.h>
+ #include <mmc.h>
+ #include <dm/device_compat.h>
++#include <semihosting.h>
+ 
+ #include "optee_msg.h"
+ #include "optee_private.h"
+@@ -17,6 +18,8 @@
+ #include "hmac_sha2.h"
+ #include "rpmb_emu.h"
+ 
++static const char *rpmb_emu_filename = "rpmb_emu.bin";
++
+ static struct rpmb_emu rpmb_emu = {
+ 	.size = EMU_RPMB_SIZE_BYTES
+ };
+@@ -250,6 +253,60 @@ static void ioctl_emu_set_ext_csd(uint8_t *ext_csd)
+ 	ext_csd[222] = EMU_RPMB_REL_WR_SEC_C;
+ }
+ 
++static void init_mem(struct rpmb_emu *mem)
++{
++	long fd, ret;
++
++	/* Try to load from file with semihosting. */
++	fd = smh_open(rpmb_emu_filename, MODE_READ | MODE_BINARY);
++	if (fd < 0) {
++		/* File does not exist: no need to complain. */
++		return;
++	}
++
++	printf("%s:%d loading %s\n", __func__, __LINE__, rpmb_emu_filename);
++
++	ret = smh_read(fd, mem, sizeof(*mem));
++	if (ret < 0)
++		printf("%s:%d: smh_read: %ld\n", __func__, __LINE__, ret);
++	else if (ret != sizeof(*mem)) {
++		printf("%s:%d: smh_read: %ld != %ld\n", __func__, __LINE__, ret,
++		       sizeof(*mem));
++	}
++
++	ret = smh_close(fd);
++	if (ret < 0)
++		printf("%s:%d: smh_close: %ld\n", __func__, __LINE__, ret);
++
++	if (mem->size != EMU_RPMB_SIZE_BYTES)
++		printf("%s:%d: bad size %ld!\n", __func__, __LINE__, mem->size);
++}
++
++static void save_mem(const struct rpmb_emu *mem)
++{
++	long fd, ret;
++	ulong written;
++
++	/* Save to file with semihosting. */
++	fd = smh_open(rpmb_emu_filename, MODE_WRITE | MODE_BINARY);
++	if (fd < 0) {
++		printf("%s:%d: smh_open: %ld\n", __func__, __LINE__, fd);
++		return;
++	}
++
++	ret = smh_write(fd, mem, sizeof(*mem), &written);
++	if (ret < 0)
++		printf("%s:%d: smh_write: %ld\n", __func__, __LINE__, ret);
++	else if (written != sizeof(*mem)) {
++		printf("%s:%d: smh_write: %ld != %ld\n", __func__, __LINE__,
++		       written, sizeof(*mem));
++	}
++
++	ret = smh_close(fd);
++	if (ret < 0)
++		printf("%s:%d: smh_close: %ld\n", __func__, __LINE__, ret);
++}
++
+ /* A crude emulation of the MMC ioctls we need for RPMB */
+ static int ioctl_emu(int fd, unsigned long request, ...)
+ {
+@@ -258,6 +315,7 @@ static int ioctl_emu(int fd, unsigned long request, ...)
+ 	uint16_t msg_type = 0;
+ 	struct rpmb_emu *mem = mem_for_fd(fd);
+ 	va_list ap;
++	static bool mem_init_done;
+ 
+ 	if (request != MMC_IOC_CMD) {
+ 		printf("Unsupported ioctl: 0x%lx\n", request);
+@@ -270,6 +328,11 @@ static int ioctl_emu(int fd, unsigned long request, ...)
+ 	cmd = va_arg(ap, struct mmc_ioc_cmd *);
+ 	va_end(ap);
+ 
++	if (!mem_init_done) {
++		init_mem(mem);
++		mem_init_done = true;
++	}
++
+ 	switch (cmd->opcode) {
+ 	case MMC_SEND_EXT_CSD:
+ 		ioctl_emu_set_ext_csd((uint8_t *)(uintptr_t)cmd->data_ptr);
+@@ -302,6 +365,8 @@ static int ioctl_emu(int fd, unsigned long request, ...)
+ 		default:
+ 			break;
+ 		}
++
++		save_mem(mem);
+ 		break;
+ 
+ 	case MMC_READ_MULTIPLE_BLOCK:
+-- 
+2.39.2
+

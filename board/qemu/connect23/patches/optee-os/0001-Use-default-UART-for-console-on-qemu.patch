@@ -1,0 +1,30 @@
+From 72a9cfbe47ae45a04ffce13d9e4eb8d34a235ab1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+Date: Tue, 8 Nov 2022 10:26:11 +0100
+Subject: [PATCH] Use default UART for console on qemu
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+---
+ core/arch/arm/plat-vexpress/platform_config.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/core/arch/arm/plat-vexpress/platform_config.h b/core/arch/arm/plat-vexpress/platform_config.h
+index 95142e67e..8893feb62 100644
+--- a/core/arch/arm/plat-vexpress/platform_config.h
++++ b/core/arch/arm/plat-vexpress/platform_config.h
+@@ -74,8 +74,7 @@
+ #define IT_UART1		40
+ #define IT_SEC_PHY_TIMER	29
+ 
+-#define CONSOLE_UART_BASE	UART1_BASE
+-#define IT_CONSOLE_UART		IT_UART1
++#define CONSOLE_UART_BASE	UART0_BASE
+ 
+ #else
+ #error "Unknown platform flavor"
+-- 
+2.45.2
+
