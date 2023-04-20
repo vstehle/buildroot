@@ -1,0 +1,4 @@
+config BR2_PACKAGE_HOST_GCAB
+	bool "host gcab"
+	help
+          https://gitlab.gnome.org/GNOME/gcab
