@@ -1,0 +1,71 @@
+#!/bin/sh
+#
+# Custom.
+#
+
+NAME="custom"
+
+start()
+{
+	printf 'Starting %s: ' "${NAME}"
+	modprobe ledtrig-heartbeat
+	echo usb-gadget >'/sys/class/leds/beaglebone:green:usr2/trigger'
+	echo usb-host >'/sys/class/leds/beaglebone:green:usr3/trigger'
+	r=$(rdev |sed 's/ .*//')
+
+	if [ -e /dev/sda ]; then
+		# If we have a USB key export it through USB.
+		f=/dev/sda
+
+	elif [ -e /dev/mmcblk0 ] && [ "$r" = /dev/mmcblk1p2 ]; then
+		# Otherwise, if we have an SD card and we run from eMMC, export
+		# the SD card through USB.
+		f=/dev/mmcblk0
+
+	else
+		# Otherwise, mount NFS and export a file through USB.
+		srv=10.0.0.1
+
+		while ! ping -c1 -W1 "$srv" >/dev/null; do
+			sleep 1
+		done
+
+		# TODO! get rid of nolock
+		mount "$srv":/tftpboot/bbb /mnt -o relatime,nolock
+
+		f=/mnt/usb.img
+		ls -laF "$f"
+	fi
+
+	modprobe g_mass_storage file="$f"
+	mount / -o remount,ro
+	echo "OK"
+}
+
+stop()
+{
+	printf 'Stopping %s: ' "${NAME}"
+	mount / -o remount,rw
+	modprobe -r g_mass_storage
+	umount /mnt
+	echo cpu0 >'/sys/class/leds/beaglebone:green:usr2/trigger'
+	modprobe -r ledtrig-heartbeat
+	echo "OK"
+}
+
+case "$1" in
+start)
+	start
+	;;
+stop)
+	stop
+	;;
+restart|reload)
+	stop
+	start
+	;;
+*)
+	echo "Usage: $0 {start|stop|restart|reload}" >&2
+	exit 1
+	;;
+esac
