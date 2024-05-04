@@ -24,9 +24,17 @@ start()
 
 	else
 		# Otherwise, mount NFS and export a file through USB.
+		srv=10.0.0.1
+
+		while ! ping -c1 -W1 "$srv" >/dev/null; do
+			sleep 1
+		done
+
 		# TODO! get rid of nolock
-		mount 10.0.0.1:/tftpboot/bbb /mnt -o relatime,nolock
+		mount "$srv":/tftpboot/bbb /mnt -o relatime,nolock
+
 		f=/mnt/usb.img
+		ls -laF "$f"
 	fi
 
 	modprobe g_mass_storage file="$f"
