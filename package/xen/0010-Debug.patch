@@ -1,0 +1,148 @@
+From f2a0bc99071bb5cc706ccc366800cb3f0f39a63c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+Date: Tue, 30 Sep 2025 11:39:54 +0200
+Subject: [PATCH] Debug
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+---
+ tools/Makefile                                | 29 ++++++++++++++++-
+ tools/libs/libs.mk                            |  2 +-
+ tools/qemu-xen/Makefile                       |  3 +-
+ .../qemu-xen/ui/keycodemapdb/data/keymaps.csv | 32 +++++++++----------
+ 4 files changed, 46 insertions(+), 20 deletions(-)
+
+diff --git a/tools/Makefile b/tools/Makefile
+index b05ad2c..3dec72d 100644
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -36,8 +36,12 @@ SUBDIRS-$(CONFIG_X86) += debugger/gdbsx
+ SUBDIRS-$(CONFIG_X86) += debugger/kdd
+ SUBDIRS-$(CONFIG_TESTS) += tests
+ 
++# These don't cross-compile
++ifeq ($(XEN_COMPILE_ARCH),$(XEN_TARGET_ARCH))
+ SUBDIRS-y += python
+ SUBDIRS-y += pygrub
++endif
++
+ SUBDIRS-$(OCAML_TOOLS) += ocaml
+ 
+ ifeq ($(CONFIG_RUMP),y)
+@@ -236,8 +240,31 @@ subdir-all-qemu-xen-dir: qemu-xen-dir-find
+ 		-DXC_WANT_COMPAT_GNTTAB_API=1 \
+ 		-DXC_WANT_COMPAT_MAP_FOREIGN_API=1 \
+ 		-DXC_WANT_COMPAT_DEVICEMODEL_API=1 \
++		-I$(XEN_ROOT)/tools/include \
+ 		$(EXTRA_CFLAGS_QEMU_XEN)" \
+-		--extra-ldflags="$(QEMU_UPSTREAM_RPATH)" \
++		--extra-ldflags=" \
++		-L$(XEN_ROOT)/tools/libs/call \
++		-L$(XEN_ROOT)/tools/libs/ctrl \
++		-L$(XEN_ROOT)/tools/libs/devicemodel \
++		-L$(XEN_ROOT)/tools/libs/evtchn \
++		-L$(XEN_ROOT)/tools/libs/foreignmemory \
++		-L$(XEN_ROOT)/tools/libs/gnttab \
++		-L$(XEN_ROOT)/tools/libs/guest \
++		-L$(XEN_ROOT)/tools/libs/store \
++		-L$(XEN_ROOT)/tools/libs/toolcore \
++		-L$(XEN_ROOT)/tools/libs/toollog \
++		-L$(XEN_ROOT)/tools/xenstore \
++		-Wl,-rpath-link=$(XEN_ROOT)/tools/libs/call \
++		-Wl,-rpath-link=$(XEN_ROOT)/tools/libs/ctrl \
++		-Wl,-rpath-link=$(XEN_ROOT)/tools/libs/devicemodel \
++		-Wl,-rpath-link=$(XEN_ROOT)/tools/libs/evtchn \
++		-Wl,-rpath-link=$(XEN_ROOT)/tools/libs/foreignmemory \
++		-Wl,-rpath-link=$(XEN_ROOT)/tools/libs/gnttab \
++		-Wl,-rpath-link=$(XEN_ROOT)/tools/libs/guest \
++		-Wl,-rpath-link=$(XEN_ROOT)/tools/libs/store \
++		-Wl,-rpath-link=$(XEN_ROOT)/tools/libs/toolcore \
++		-Wl,-rpath-link=$(XEN_ROOT)/tools/libs/toollog \
++		$(QEMU_UPSTREAM_RPATH)" \
+ 		--bindir=$(LIBEXEC_BIN) \
+ 		--datadir=$(SHAREDIR)/qemu-xen \
+ 		--localstatedir=$(localstatedir) \
+diff --git a/tools/libs/libs.mk b/tools/libs/libs.mk
+index c453a46..7ed9d62 100644
+--- a/tools/libs/libs.mk
++++ b/tools/libs/libs.mk
+@@ -29,7 +29,7 @@ endif
+ comma:= ,
+ empty:=
+ space:= $(empty) $(empty)
+-PKG_CONFIG ?= $(LIB_FILE_NAME).pc
++PKG_CONFIG = $(LIB_FILE_NAME).pc
+ PKG_CONFIG_NAME ?= Xen$(LIBNAME)
+ PKG_CONFIG_DESC ?= The $(PKG_CONFIG_NAME) library for Xen hypervisor
+ PKG_CONFIG_VERSION := $(MAJOR).$(MINOR)
+diff --git a/tools/qemu-xen/Makefile b/tools/qemu-xen/Makefile
+index 13dd708..ae41169 100644
+--- a/tools/qemu-xen/Makefile
++++ b/tools/qemu-xen/Makefile
+@@ -311,9 +311,10 @@ ui/input-keymap-%.c: $(KEYCODEMAP_GEN) $(KEYCODEMAP_CSV) $(SRC_PATH)/ui/Makefile
+ 	    stem=$* && src=$${stem%-to-*} dst=$${stem#*-to-} && \
+ 	    test -e $(KEYCODEMAP_GEN) && \
+ 	    $(PYTHON) $(KEYCODEMAP_GEN) \
++	          code-map \
+ 	          --lang glib2 \
+ 	          --varname qemu_input_map_$${src}_to_$${dst} \
+-	          code-map $(KEYCODEMAP_CSV) $${src} $${dst} \
++	          $(KEYCODEMAP_CSV) $${src} $${dst} \
+ 	        > $@ || rm -f $@, "GEN", "$@")
+ 
+ $(KEYCODEMAP_GEN): .git-submodule-status
+diff --git a/tools/qemu-xen/ui/keycodemapdb/data/keymaps.csv b/tools/qemu-xen/ui/keycodemapdb/data/keymaps.csv
+index 0fefcef..a54973e 100644
+--- a/tools/qemu-xen/ui/keycodemapdb/data/keymaps.csv
++++ b/tools/qemu-xen/ui/keycodemapdb/data/keymaps.csv
+@@ -192,11 +192,9 @@ KEY_PAUSE,119,,,0xe046,0xe077,0x62,72,VK_PAUSE,0x013,0x66,0x66,XK_Pause,0xff13,P
+ KEY_SCALE,120,,,0xe00b,,,,,,,,,,,I128,,,
+ KEY_KPCOMMA,121,,,0x7e,0x6d,,133,VK_SEPARATOR??,0x6c,,,,,NumpadComma,KPCO,kp_comma,,
+ KEY_KPCOMMA,121,,,0x7e,0x6d,,133,VK_SEPARATOR??,0x6c,,,,,NumpadComma,I129,,,
+-KEY_HANGEUL,122,JIS_Kana,0x68,0x72,,,144,VK_HANGEUL,0x15,,0x71,,,Lang1,HNGL,lang1,,
+-KEY_HANGEUL,122,JIS_Kana,0x68,0x72,,,144,VK_IME_ON,0x16,,0x71,,,Lang1,HNGL,lang1,,
+-KEY_HANJA,123,JIS_Eisu,0x66,0x71,,,145,VK_HANJA,0x19,,0x72,,,Lang2,HJCV,lang2,,
+-KEY_HANJA,123,JIS_Eisu,0x66,0x71,,,145,VK_IME_OFF,0x1A,,0x72,,,Lang2,HJCV,lang2,,
+-KEY_YEN,124,JIS_Yen,0x5d,0x7d,0x6a,0x5d,137,VK_OEM_5,0xdc,0x7d,0x7d,,,IntlYen,AE13,yen,,
++KEY_HANGEUL,122,,,,,,144,VK_HANGEUL,0x15,,,,,,HNGL,,,
++KEY_HANJA,123,,,0xe00d,,,145,VK_HANJA,0x19,,,,,,HJCV,,,
++KEY_YEN,124,JIS_Yen,0x5d,0x7d,0x6a,0x5d,137,,,0x7d,0x7d,,,IntlYen,AE13,yen,,
+ KEY_LEFTMETA,125,Command,0x37,0xe05b,0xe01f,0x8b,227,VK_LWIN,0x5b,0x6b,0x6b,XK_Meta_L,0xffe7,MetaLeft,LMTA,meta_l,0x78,0x37
+ KEY_LEFTMETA,125,Command,0x37,0xe05b,0xe01f,0x8b,227,VK_LWIN,0x5b,0x6b,0x6b,XK_Meta_L,0xffe7,MetaLeft,LWIN,meta_l,0x78,0x37
+ KEY_RIGHTMETA,126,RightCommand,0x36,0xe05c,0xe027,0x8c,231,VK_RWIN,0x5c,0x6c,0x6c,XK_Meta_R,0xffe8,MetaRight,RMTA,meta_r,0x7a,0x37
+@@ -261,18 +259,18 @@ KEY_KPLEFTPAREN,179,,,0xe076,,,182,,,,,,,NumpadParenLeft,I187,,,
+ KEY_KPRIGHTPAREN,180,,,0xe07b,,,183,,,,,,,NumpadParenRight,I188,,,
+ KEY_NEW,181,,,0xe009,,,,,,,,,,,I189,,,
+ KEY_REDO,182,,,0xe00a,,,,,,,,,,,I190,,,
+-KEY_F13,183,F13,0x69,0x5d,0x2f,0x7f,104,VK_F13,0x7c,0x6e,0x6e,,,F13,FK13,f13,,0x69
+-KEY_F14,184,F14,0x6b,0x5e,0x37,0x80,105,VK_F14,0x7d,0x6f,0x6f,,,F14,FK14,f14,,0x6b
+-KEY_F15,185,F15,0x71,0x5f,0x3f,0x81,106,VK_F15,0x7e,0x70,0x70,,,F15,FK15,f15,,0x71
+-KEY_F16,186,F16,0x6a,0x55,,0x82,107,VK_F16,0x7f,0x71,0x71,,,F16,FK16,f16,,
+-KEY_F17,187,F17,0x40,0xe003,,0x83,108,VK_F17,0x80,0x72,0x72,,,F17,FK17,f17,,
+-KEY_F18,188,F18,0x4f,0xe077,,,109,VK_F18,0x81,,,,,F18,FK18,f18,,
+-KEY_F19,189,F19,0x50,0xe004,,,110,VK_F19,0x82,,,,,F19,FK19,f19,,
+-KEY_F20,190,F20,0x5a,0x5a,,,111,VK_F20,0x83,,,,,F20,FK20,f20,,
+-KEY_F21,191,,,0x74,,,112,VK_F21,0x84,,,,,F21,FK21,f21,,
+-KEY_F22,192,,,0xe079,,,113,VK_F22,0x85,,,,,F22,FK22,f22,,
+-KEY_F23,193,,,0x6d,,,114,VK_F23,0x86,,,,,F23,FK23,f23,,
+-KEY_F24,194,,,0x6f,,,115,VK_F24,0x87,,,,,F24,FK24,f24,,
++KEY_F13,183,F13,0x69,0x5d,0x2f,0x7f,104,VK_F13,0x7c,0x6e,0x6e,,,F13,FK13,,,0x69
++KEY_F14,184,F14,0x6b,0x5e,0x37,0x80,105,VK_F14,0x7d,0x6f,0x6f,,,F14,FK14,,,0x6b
++KEY_F15,185,F15,0x71,0x5f,0x3f,0x81,106,VK_F15,0x7e,0x70,0x70,,,F15,FK15,,,0x71
++KEY_F16,186,F16,0x6a,0x55,,0x82,107,VK_F16,0x7f,0x71,0x71,,,F16,FK16,,,
++KEY_F17,187,F17,0x40,0xe003,,0x83,108,VK_F17,0x80,0x72,0x72,,,F17,FK17,,,
++KEY_F18,188,F18,0x4f,0xe077,,,109,VK_F18,0x81,,,,,F18,FK18,,,
++KEY_F19,189,F19,0x50,0xe004,,,110,VK_F19,0x82,,,,,F19,FK19,,,
++KEY_F20,190,F20,0x5a,0x5a,,,111,VK_F20,0x83,,,,,F20,FK20,,,
++KEY_F21,191,,,0x74,,,112,VK_F21,0x84,,,,,F21,FK21,,,
++KEY_F22,192,,,0xe079,,,113,VK_F22,0x85,,,,,F22,FK22,,,
++KEY_F23,193,,,0x6d,,,114,VK_F23,0x86,,,,,F23,FK23,,,
++KEY_F24,194,,,0x6f,,,115,VK_F24,0x87,,,,,F24,FK24,,,
+ ,195,,,0xe015,,,,,,,,,,,,,,
+ ,196,,,0xe016,,,,,,,,,,,,,,
+ ,197,,,0xe01a,,,,,,,,,,,,,,
+-- 
+2.51.0
+

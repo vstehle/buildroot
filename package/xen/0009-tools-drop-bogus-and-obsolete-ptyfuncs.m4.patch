@@ -1,4 +1,4 @@
-From 13a088627ae0c99f6c7c763ce0883dc804b54b66 Mon Sep 17 00:00:00 2001
+From 1b7d7c93327b2de816735b859db9d6763c601f23 Mon Sep 17 00:00:00 2001
 From: Olaf Hering <olaf@aepfle.de>
 Date: Fri, 12 May 2023 12:26:14 +0000
 Subject: [PATCH] tools: drop bogus and obsolete ptyfuncs.m4
@@ -25,22 +25,20 @@ by UTIL_LIBS from config/StdGNU.mk.
 
 Signed-off-by: Olaf Hering <olaf@aepfle.de>
 Reviewed-by: Anthony PERARD <anthony.perard@citrix.com>
-[Vincent: backported to 4.14.6]
-Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
-Upstream: https://xenbits.xen.org/gitweb/?p=xen.git;a=commitdiff;h=42abf5b9c53eb1b1a902002fcda68708234152c3
+[Backported.]
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
 ---
- config/Tools.mk.in             |  2 -
- m4/ptyfuncs.m4                 | 35 -----------------
- tools/config.h.in              |  3 --
- tools/configure                | 68 ----------------------------------
- tools/configure.ac             |  2 -
- tools/libxl/Makefile           |  2 +-
- tools/libxl/libxl_bootloader.c |  4 --
- 7 files changed, 1 insertion(+), 115 deletions(-)
+ config/Tools.mk.in                  |  2 -
+ m4/ptyfuncs.m4                      | 35 ---------------
+ tools/config.h.in                   |  3 --
+ tools/configure                     | 68 -----------------------------
+ tools/configure.ac                  |  2 -
+ tools/libs/light/libxl_bootloader.c |  4 --
+ 6 files changed, 114 deletions(-)
  delete mode 100644 m4/ptyfuncs.m4
 
 diff --git a/config/Tools.mk.in b/config/Tools.mk.in
-index 23df47af8d..4971c3f526 100644
+index d479366..a2dd0fb 100644
 --- a/config/Tools.mk.in
 +++ b/config/Tools.mk.in
 @@ -31,8 +31,6 @@ PTHREAD_CFLAGS      := @PTHREAD_CFLAGS@
@@ -54,7 +52,7 @@ index 23df47af8d..4971c3f526 100644
  XEN_TOOLS_RPATH     := @rpath@
 diff --git a/m4/ptyfuncs.m4 b/m4/ptyfuncs.m4
 deleted file mode 100644
-index 3e37b5a23c..0000000000
+index 3e37b5a..0000000
 --- a/m4/ptyfuncs.m4
 +++ /dev/null
 @@ -1,35 +0,0 @@
@@ -94,10 +92,10 @@ index 3e37b5a23c..0000000000
 -    AC_SUBST(PTYFUNCS_LIBS)
 -])
 diff --git a/tools/config.h.in b/tools/config.h.in
-index 5abf6092de..6b9a479928 100644
+index 52e01b2..89eef9c 100644
 --- a/tools/config.h.in
 +++ b/tools/config.h.in
-@@ -87,9 +87,6 @@
+@@ -90,9 +90,6 @@
  /* Define extfs header to use */
  #undef INCLUDE_EXTFS_H
  
@@ -108,7 +106,7 @@ index 5abf6092de..6b9a479928 100644
  #undef IPXE_PATH
  
 diff --git a/tools/configure b/tools/configure
-index cf937c9b7a..5102297210 100755
+index 5df30df..ccd2315 100755
 --- a/tools/configure
 +++ b/tools/configure
 @@ -636,7 +636,6 @@ LIBNL3_LIBS
@@ -119,7 +117,7 @@ index cf937c9b7a..5102297210 100755
  PTHREAD_LIBS
  PTHREAD_LDFLAGS
  PTHREAD_CFLAGS
-@@ -3739,8 +3738,6 @@ esac
+@@ -3750,8 +3749,6 @@ esac
  
  
  
@@ -128,7 +126,7 @@ index cf937c9b7a..5102297210 100755
  # Fetched from http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_compare_version.m4
  # Commit ID: 27948f49ca30e4222bb7cdd55182bd7341ac50c5
  # ===========================================================================
-@@ -8871,71 +8868,6 @@ $as_echo "$ax_cv_pthread_flags" >&6; }
+@@ -8962,71 +8959,6 @@ $as_echo "$ax_cv_pthread_flags" >&6; }
  
  
  
@@ -201,7 +199,7 @@ index cf937c9b7a..5102297210 100755
  $as_echo_n "checking for yajl_alloc in -lyajl... " >&6; }
  if ${ac_cv_lib_yajl_yajl_alloc+:} false; then :
 diff --git a/tools/configure.ac b/tools/configure.ac
-index 1808cffafb..9e5cf3aae0 100644
+index 6414fcb..aec0a1c 100644
 --- a/tools/configure.ac
 +++ b/tools/configure.ac
 @@ -67,7 +67,6 @@ m4_include([../m4/uuid.m4])
@@ -212,7 +210,7 @@ index 1808cffafb..9e5cf3aae0 100644
  m4_include([../m4/extfs.m4])
  m4_include([../m4/fetcher.m4])
  m4_include([../m4/ax_compare_version.m4])
-@@ -417,7 +416,6 @@ AC_SUBST(zlib)
+@@ -419,7 +418,6 @@ AC_SUBST(zlib)
  AC_SUBST(system_aio)
  AX_CHECK_EXTFS
  AX_CHECK_PTHREAD
@@ -220,24 +218,11 @@ index 1808cffafb..9e5cf3aae0 100644
  AC_CHECK_LIB([yajl], [yajl_alloc], [],
      [AC_MSG_ERROR([Could not find yajl])])
  AC_CHECK_LIB([z], [deflateCopy], [], [AC_MSG_ERROR([Could not find zlib])])
-diff --git a/tools/libxl/Makefile b/tools/libxl/Makefile
-index 38cd43abae..0f09be1624 100644
---- a/tools/libxl/Makefile
-+++ b/tools/libxl/Makefile
-@@ -20,7 +20,7 @@ LIBUUID_LIBS += -luuid
- endif
- 
- LIBXL_LIBS =
--LIBXL_LIBS = $(LDLIBS_libxentoollog) $(LDLIBS_libxenevtchn) $(LDLIBS_libxenctrl) $(LDLIBS_libxenguest) $(LDLIBS_libxenhypfs) $(LDLIBS_libxenstore) $(LDLIBS_libxentoolcore) $(PTYFUNCS_LIBS) $(LIBUUID_LIBS)
-+LIBXL_LIBS = $(LDLIBS_libxentoollog) $(LDLIBS_libxenevtchn) $(LDLIBS_libxenctrl) $(LDLIBS_libxenguest) $(LDLIBS_libxenhypfs) $(LDLIBS_libxenstore) $(LDLIBS_libxentoolcore) $(UTIL_LIBS) $(LIBUUID_LIBS)
- ifeq ($(CONFIG_LIBNL),y)
- LIBXL_LIBS += $(LIBNL3_LIBS)
- endif
-diff --git a/tools/libxl/libxl_bootloader.c b/tools/libxl/libxl_bootloader.c
-index 18e9ebd714..1bc6e51827 100644
---- a/tools/libxl/libxl_bootloader.c
-+++ b/tools/libxl/libxl_bootloader.c
-@@ -19,10 +19,6 @@
+diff --git a/tools/libs/light/libxl_bootloader.c b/tools/libs/light/libxl_bootloader.c
+index 3ca6463..a4beff4 100644
+--- a/tools/libs/light/libxl_bootloader.c
++++ b/tools/libs/light/libxl_bootloader.c
+@@ -20,10 +20,6 @@
  #include <utmp.h>
  #endif
  
@@ -249,5 +234,5 @@ index 18e9ebd714..1bc6e51827 100644
  
  #define BOOTLOADER_BUF_OUT 65536
 -- 
-2.45.2
+2.51.0
 
