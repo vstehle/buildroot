@@ -1,4 +1,4 @@
-From 5743964346e259978200276ba6eb86b4dbceee55 Mon Sep 17 00:00:00 2001
+From 2ba2eef5b11d81b801265ae92df91571c19cc8a3 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
 Date: Tue, 30 Sep 2025 11:39:54 +0200
 Subject: [PATCH] Debug
@@ -13,10 +13,10 @@ Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
  2 files changed, 29 insertions(+), 2 deletions(-)
 
 diff --git a/tools/Makefile b/tools/Makefile
-index 02115b46..44710304 100644
+index a9a3196e..5d289651 100644
 --- a/tools/Makefile
 +++ b/tools/Makefile
-@@ -36,8 +36,12 @@ SUBDIRS-$(CONFIG_X86) += xenpaging
+@@ -37,8 +37,12 @@ SUBDIRS-$(CONFIG_X86) += xenpaging
  SUBDIRS-$(CONFIG_X86) += debugger
  SUBDIRS-$(CONFIG_TESTS) += tests
  
@@ -29,7 +29,7 @@ index 02115b46..44710304 100644
  SUBDIRS-$(OCAML_TOOLS) += ocaml
  
  ifeq ($(CONFIG_RUMP),y)
-@@ -235,8 +239,31 @@ subdir-all-qemu-xen-dir: qemu-xen-dir-find
+@@ -236,8 +240,31 @@ subdir-all-qemu-xen-dir: qemu-xen-dir-find
  		-DXC_WANT_COMPAT_GNTTAB_API=1 \
  		-DXC_WANT_COMPAT_MAP_FOREIGN_API=1 \
  		-DXC_WANT_COMPAT_DEVICEMODEL_API=1 \
