@@ -1,4 +1,4 @@
-From b7e2da5af3529e730f802324b25ccc4848c19ba9 Mon Sep 17 00:00:00 2001
+From 01f5031c6b8d9df67a222f1bb428ba45e721693a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
 Date: Mon, 16 Jun 2025 17:16:39 +0200
 Subject: [PATCH] No trace backend
@@ -12,7 +12,7 @@ Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
  1 file changed, 1 insertion(+), 7 deletions(-)
 
 diff --git a/tools/Makefile b/tools/Makefile
-index 9b6b605e..b05ad2c5 100644
+index 4906fdbc..1c81eee6 100644
 --- a/tools/Makefile
 +++ b/tools/Makefile
 @@ -217,13 +217,7 @@ subdir-all-qemu-xen-dir: qemu-xen-dir-find

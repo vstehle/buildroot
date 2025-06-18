@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-XEN_VERSION = 4.16.7
+XEN_VERSION = 4.17.5
 XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
 XEN_SELINUX_MODULES = systemd udev xen
 XEN_LICENSE = GPL-2.0
@@ -23,7 +23,8 @@ endif
 XEN_CONF_OPTS = \
 	--disable-golang \
 	--disable-ocamltools \
-	--with-initddir=/etc/init.d
+	--with-initddir=/etc/init.d \
+	--disable-werror
 
 XEN_CONF_ENV = PYTHON=$(HOST_DIR)/bin/python3
 XEN_MAKE_ENV = \

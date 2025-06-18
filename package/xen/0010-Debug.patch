@@ -1,4 +1,4 @@
-From 130d9aba834f3b74e567cf6cf2c3f85264eeb6e4 Mon Sep 17 00:00:00 2001
+From dc3ebe88414a6c1b99c6fbad088358be4cefec4c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
 Date: Tue, 30 Sep 2025 11:39:54 +0200
 Subject: [PATCH] Debug
@@ -12,11 +12,11 @@ Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
  1 file changed, 28 insertions(+), 1 deletion(-)
 
 diff --git a/tools/Makefile b/tools/Makefile
-index b05ad2c5..3dec72d6 100644
+index 1c81eee6..18b6c1f2 100644
 --- a/tools/Makefile
 +++ b/tools/Makefile
-@@ -36,8 +36,12 @@ SUBDIRS-$(CONFIG_X86) += debugger/gdbsx
- SUBDIRS-$(CONFIG_X86) += debugger/kdd
+@@ -35,8 +35,12 @@ SUBDIRS-$(CONFIG_X86) += xenpaging
+ SUBDIRS-$(CONFIG_X86) += debugger
  SUBDIRS-$(CONFIG_TESTS) += tests
  
 +# These don't cross-compile

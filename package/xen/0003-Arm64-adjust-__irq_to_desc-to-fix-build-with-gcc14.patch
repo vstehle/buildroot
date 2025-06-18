@@ -1,4 +1,4 @@
-From 6ae44eff7407c590e4696e721dc4178d3a623d8d Mon Sep 17 00:00:00 2001
+From 9e6950d87e1cc3b496f7207ee7d8fa2115983fd3 Mon Sep 17 00:00:00 2001
 From: Jan Beulich <jbeulich@suse.com>
 Date: Thu, 29 Aug 2024 10:03:53 +0200
 Subject: [PATCH] Arm64: adjust __irq_to_desc() to fix build with gcc14
@@ -27,27 +27,14 @@ Acked-by: Michal Orzel <michal.orzel@amd.com>
 Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
 Upstream: https://xenbits.xen.org/gitweb/?p=xen.git;a=commitdiff;h=99f942f3d410059dc223ee0a908827e928ef3592
 ---
- xen/arch/arm/irq.c        | 2 +-
- xen/include/asm-arm/irq.h | 2 +-
+ xen/arch/arm/include/asm/irq.h | 2 +-
+ xen/arch/arm/irq.c             | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/xen/arch/arm/irq.c b/xen/arch/arm/irq.c
-index b761d90c..61618e7e 100644
---- a/xen/arch/arm/irq.c
-+++ b/xen/arch/arm/irq.c
-@@ -66,7 +66,7 @@ hw_irq_controller no_irq_type = {
- static irq_desc_t irq_desc[NR_IRQS];
- static DEFINE_PER_CPU(irq_desc_t[NR_LOCAL_IRQS], local_irq_desc);
- 
--irq_desc_t *__irq_to_desc(int irq)
-+irq_desc_t *__irq_to_desc(unsigned int irq)
- {
-     if ( irq < NR_LOCAL_IRQS )
-         return &this_cpu(local_irq_desc)[irq];
-diff --git a/xen/include/asm-arm/irq.h b/xen/include/asm-arm/irq.h
-index e45d5745..33fbbadb 100644
---- a/xen/include/asm-arm/irq.h
-+++ b/xen/include/asm-arm/irq.h
+diff --git a/xen/arch/arm/include/asm/irq.h b/xen/arch/arm/include/asm/irq.h
+index 245f49dc..5e6680fc 100644
+--- a/xen/arch/arm/include/asm/irq.h
++++ b/xen/arch/arm/include/asm/irq.h
 @@ -57,7 +57,7 @@ extern const unsigned int nr_irqs;
  struct irq_desc;
  struct irqaction;
@@ -57,6 +44,19 @@ index e45d5745..33fbbadb 100644
  
  #define irq_to_desc(irq)    __irq_to_desc(irq)
  
+diff --git a/xen/arch/arm/irq.c b/xen/arch/arm/irq.c
+index 8649c636..ac972bd9 100644
+--- a/xen/arch/arm/irq.c
++++ b/xen/arch/arm/irq.c
+@@ -67,7 +67,7 @@ hw_irq_controller no_irq_type = {
+ static irq_desc_t irq_desc[NR_IRQS];
+ static DEFINE_PER_CPU(irq_desc_t[NR_LOCAL_IRQS], local_irq_desc);
+ 
+-irq_desc_t *__irq_to_desc(int irq)
++irq_desc_t *__irq_to_desc(unsigned int irq)
+ {
+     if ( irq < NR_LOCAL_IRQS )
+         return &this_cpu(local_irq_desc)[irq];
 -- 
 2.51.0
 
