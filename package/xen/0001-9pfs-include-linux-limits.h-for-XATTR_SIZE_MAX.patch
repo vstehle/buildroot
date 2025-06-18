@@ -1,4 +1,4 @@
-From 9fd11ba47a1b94e5c56a3543e7914d42f0bd194f Mon Sep 17 00:00:00 2001
+From af0da9b72a6a3f980553ae9355a39587fe220684 Mon Sep 17 00:00:00 2001
 From: Patrick Steinhardt <ps@pks.im>
 Date: Mon, 26 Jun 2017 21:20:45 +0200
 Subject: [PATCH] 9pfs: include <linux/limits.h> for XATTR_SIZE_MAX
@@ -26,11 +26,11 @@ Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/tools/qemu-xen/hw/9pfs/9p.c b/tools/qemu-xen/hw/9pfs/9p.c
-index 225f31fc..1de13924 100644
+index 9621ec13..e51c83ae 100644
 --- a/tools/qemu-xen/hw/9pfs/9p.c
 +++ b/tools/qemu-xen/hw/9pfs/9p.c
-@@ -23,6 +23,7 @@
- #include <limits.h>
+@@ -21,6 +21,7 @@
+ #include <linux/limits.h>
  #endif
  #include <glib/gprintf.h>
 +#include <linux/limits.h>
